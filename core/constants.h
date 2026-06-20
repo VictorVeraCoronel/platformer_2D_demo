@@ -1,0 +1,11 @@
+#pragma once
+#include <cstdint>
+
+
+//----------------------------------------------
+// DATA THAT WILL ALWAYS BE THE SAME THROUGHOUT THE ENTIRE GAME:
+//----------------------------------------------
+const uint16_t MAX_ENTITIES = 500;
+const uint8_t MAX_PLAYERS = 4;
+const uint8_t MAX_ASSETS = 100;
+
