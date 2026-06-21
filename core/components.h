@@ -22,6 +22,7 @@ struct PhysicsComponent{
 // GAMEPLAY SYSTEM COMPONENTS:
 //----------------------------------------------
 struct StatsComponent{
+    bool active[MAX_ENTITIES];
     float hp[MAX_ENTITIES];
     float jumping_force[MAX_ENTITIES];
     float running_force[MAX_ENTITIES];
@@ -32,6 +33,7 @@ struct InputComponent{
     bool active[MAX_PLAYERS];
     MoveIntentHorizontal move_intent[MAX_PLAYERS];
     bool jump_pressed[MAX_PLAYERS];
+    bool jump_released[MAX_PLAYERS];
     float coyote_timer[MAX_PLAYERS];
     float jump_buffer_timer[MAX_PLAYERS];
     bool run_pressed[MAX_PLAYERS];
@@ -43,6 +45,7 @@ struct InputComponent{
 // RENDER SYSTEM COMPONENTS:
 //----------------------------------------------
 struct RenderComponent{
+    bool active[MAX_ENTITIES];
     uint16_t asset_id[MAX_ENTITIES];
     uint16_t asset_width[MAX_ENTITIES];
     uint16_t asset_height[MAX_ENTITIES];
@@ -50,6 +53,7 @@ struct RenderComponent{
 };
 
 struct AnimationComponent{
+    bool active[MAX_ENTITIES];
     uint8_t n_frames[MAX_ENTITIES];
     uint8_t current_frame[MAX_ENTITIES];
     uint8_t asset_width[MAX_ENTITIES];
@@ -67,8 +71,12 @@ struct AnimationComponent{
 // SOUND SYSTEM COMPONENTS:
 //----------------------------------------------
 struct SoundComponent{
+    bool active[MAX_ENTITIES];
     Music current_background_music;
     float current_music_volume;
+
+    SoundEvent sound_trigger_id[MAX_ENTITIES];
+    bool should_play[MAX_ENTITIES];
 
 };
 

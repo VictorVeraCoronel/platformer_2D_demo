@@ -34,6 +34,15 @@ enum class Direction : uint8_t {
 
 };
 
+enum class SoundEvent : uint8_t {
+    NONE = 0,
+    PLAYER_JUMP=1,
+    PLAYER_HIT=2,
+    ENEMY_DEATH=3,
+    COIN_PICKUP=4,
+    WALL_SLIDE_LOOP=5
+};
+
 
 
 //----------------------------------------------

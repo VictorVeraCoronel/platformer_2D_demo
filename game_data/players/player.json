@@ -1,0 +1,11 @@
+{
+    "entity_type" : "player",
+    "running_force": 100,
+    "jumping_force": 500,
+    "hp" : 1,
+    "sprite_id" : 0,
+    "n_anim_frames" : 8,
+    "anim_speed" : 0.12,
+    "sprite_size" : 32,
+    "position_size" : 32,
+}
