@@ -43,6 +43,13 @@ enum class SoundEvent : uint8_t {
     WALL_SLIDE_LOOP=5
 };
 
+enum class GameState : uint8_t {
+    MAIN_MENU = 0,
+    GAMEPLAY = 1,
+    PAUSE = 2,
+    GAME_OVER = 3
+};
+
 
 
 //----------------------------------------------

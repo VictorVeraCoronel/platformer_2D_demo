@@ -4,12 +4,32 @@
 #include "./systems/logic/gameplay_system.h"
 #include "./systems/logic/input_system.h"
 
+#include "./systems/render/render_core.h"
+
+#include <iostream>
+
 int main(){
 
     std::unique_ptr<World> world = std::make_unique<World>();
 
-    InitWindow(1280, 720, "platformer_2D");
-    SetTargetFPS(144.0f);
+    //Testing
+    world->physics.active[0] = true;
+    world->stats.active[0] = true;
+    world->inputs.active[0] = true;
+    world->renders.active[0] = true;
+    world->physics.positions[0].x = 50;
+    world->physics.positions[0].y = 50;
+    world->physics.mass[0] = 1;
+    world->stats.jumping_force[0] = 60000.0f;
+    world->stats.running_force[0] = 7500.0f;
+    world->stats.air_movement_force[0] = 1000.0f;
+    world->gravity = 1600.0f;
+    world->fall_gravity_multiplier = 2.25f;
+
+
+
+    InitWindow(1600, 900, "platformer_2D");
+    SetTargetFPS(60.0f);
 
     const float dt = 1.0f / 60.0f; //
     float acumulador = 0.0f;
@@ -22,10 +42,11 @@ int main(){
 
         acumulador += frame_time;
 
+
+        UpdateInput(*world);
         // LOGIC LOOP (60 HZ)
         while (acumulador >= dt) {
 
-            UpdateInput(*world);
             UpdatePhysics(*world, dt);
             UpdateGameplay(*world);
 
@@ -36,7 +57,7 @@ int main(){
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
-            //RenderCoreSystem(world);
+            RenderCore(*world);
             //RenderUISystem(world);
 
         EndDrawing();

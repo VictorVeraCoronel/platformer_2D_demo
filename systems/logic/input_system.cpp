@@ -1,21 +1,12 @@
 #include "../../core/world.h"
 #include <raylib.h>
 
-void ClearInput(InputComponent& inputs,int i){
-    inputs.move_intent[i] = MoveIntentHorizontal::NONE;
-    inputs.jump_pressed[i] = false;
-    inputs.jump_released[i] = false;
-    inputs.run_pressed[i] = false;
-}
-
 void UpdateInput(World& world){
 
     auto& inputs = world.inputs;
 
     for(int i = 0; i < MAX_PLAYERS; i++){
         if (!inputs.active[i]) continue;//Performance check
-
-        ClearInput(inputs, i);
 
         int PLAYER = i;
         switch (PLAYER){

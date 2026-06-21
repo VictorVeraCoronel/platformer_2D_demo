@@ -20,8 +20,8 @@ struct World{
     Level current_level;
     AssetRepository asset_repository;
     EntityRepository entity_repository;
-    float gravity;
-    float fall_gravity_multiplier;
+    float gravity = 9.8f;
+    float fall_gravity_multiplier = 1.5f;
 
     //----------------------------------------------
     // Init of every world attribute:

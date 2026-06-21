@@ -8,5 +8,6 @@
 const uint16_t MAX_ENTITIES = 500;
 const uint8_t MAX_PLAYERS = 4;
 const uint8_t MAX_ASSETS = 100;
-const float FRICTION = 0.85f;
+const float GROUND_FRICTION = 0.85f;
+const float AIR_FRICTION = 0.98f;
 

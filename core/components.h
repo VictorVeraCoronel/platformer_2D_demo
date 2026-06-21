@@ -14,6 +14,7 @@ struct PhysicsComponent{
     Vector2 sizes[MAX_ENTITIES];
     Vector2 forces[MAX_ENTITIES];
     float mass[MAX_ENTITIES];
+    bool is_grounded[MAX_ENTITIES];
 
 };
 
@@ -26,6 +27,7 @@ struct StatsComponent{
     float hp[MAX_ENTITIES];
     float jumping_force[MAX_ENTITIES];
     float running_force[MAX_ENTITIES];
+    float air_movement_force[MAX_ENTITIES];
 
 };
 
