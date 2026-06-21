@@ -1,33 +1,32 @@
 #pragma once
 #include "./components.h"
 #include "types.h"
+#include <unordered_map>
 
 struct World{
 
     //----------------------------------------------
     // COMPONENTS:
     //----------------------------------------------
-    PhysicsComponent physics;
-    StatsComponent stats;
-    InputComponent inputs;
-    RenderComponent renders;
-    AnimationComponent animations;
-    SoundComponent sounds;
+    PhysicsComponent physics = {};
+    StatsComponent stats = {};
+    InputComponent inputs = {};
+    RenderComponent renders = {};
+    AnimationComponent animations = {};
+    SoundComponent sounds = {};
 
     //----------------------------------------------
     // WORLD ATTRIBUTES:
     //----------------------------------------------
     Level current_level;
     AssetRepository asset_repository;
-    EntityRepository entity_repository;
-    float gravity = 9.8f;
-    float fall_gravity_multiplier = 1.5f;
+    std::unordered_map<std::string, Entity> entity_repository;
+    float gravity = 1600.0f;
+    float fall_gravity_multiplier = 2.25f;
 
     //----------------------------------------------
     // Init of every world attribute:
     //----------------------------------------------
-    World(){
-
-    }
+    World() = default;
 
 };

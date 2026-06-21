@@ -3,6 +3,7 @@
 #include <vector>
 #include "constants.h"
 #include "raylib.h"
+#include <string>
 
 
 //----------------------------------------------
@@ -70,16 +71,19 @@ struct AssetRepository{
 
 };
 
-struct EntityRepository{
-    float jumping_force[MAX_ASSETS];
-    float running_force[MAX_ASSETS];
-    float HP[MAX_ASSETS];
+struct Entity{
+    float jumping_force;
+    float running_force;
+    float air_movement_force;
+    float HP;
+    float anim_speed;
 
-    uint16_t sprite_id[MAX_ASSETS];
-    uint16_t sprite_width[MAX_ASSETS];
-    uint16_t sprite_height[MAX_ASSETS];
-    uint8_t n_animation_frames[MAX_ASSETS];
+    uint16_t sprite_id;
+    uint16_t sprite_width;
+    uint16_t sprite_height;
+    uint16_t width;
+    uint16_t height;
+    uint8_t n_animation_frames;
 
-    AIArchetype ai_archetype[MAX_ASSETS];
-
+    AIArchetype ai_archetype;
 };

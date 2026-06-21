@@ -8,9 +8,11 @@ void UpdatePhysics(World& world, float dt){
     const float gravity = world.gravity;
     const float fall_multiplier = world.fall_gravity_multiplier;
 
-    std::cout<<physics.forces[0].y<<std::endl;
+
 
     for(int i = 0; i < MAX_ENTITIES; i++){
+        //std::cout<<(physics.active[i])<<std::endl;
+
         if (!physics.active[i]) continue;//Performance filter
 
         //Check if player touchs ground

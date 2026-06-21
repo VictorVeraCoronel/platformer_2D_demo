@@ -6,6 +6,8 @@
 
 #include "./systems/render/render_core.h"
 
+#include "loaders/data_loader.h"
+
 #include <iostream>
 
 int main(){
@@ -23,8 +25,6 @@ int main(){
     world->stats.jumping_force[0] = 60000.0f;
     world->stats.running_force[0] = 7500.0f;
     world->stats.air_movement_force[0] = 1000.0f;
-    world->gravity = 1600.0f;
-    world->fall_gravity_multiplier = 2.25f;
 
 
 
@@ -33,6 +33,11 @@ int main(){
 
     const float dt = 1.0f / 60.0f; //
     float acumulador = 0.0f;
+
+    LoadPlayerData(*world);
+    LoadEnemiesData(*world, "world_1");
+    LoadBossesData(*world, "world_1");
+
 
     while (!WindowShouldClose()) {
 

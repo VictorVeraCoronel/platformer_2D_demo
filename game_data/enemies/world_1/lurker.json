@@ -1,6 +1,6 @@
 {
     "ai_archetype" : 0,
-    "entity_type" : "player",
+    "entity_type" : "lurker",
     "running_force": 100,
     "jumping_force": 500,
     "air_movement_force": 40,
