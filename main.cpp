@@ -7,6 +7,7 @@
 #include "./systems/render/render_core.h"
 
 #include "loaders/data_loader.h"
+#include "loaders/asset_loader.h"
 
 #include <iostream>
 
@@ -37,6 +38,10 @@ int main(){
     LoadPlayerData(*world);
     LoadEnemiesData(*world, "world_1");
     LoadBossesData(*world, "world_1");
+
+    LoadUIAssets(*world);
+    LoadSpriteAssets(*world);
+    LoadTileAssets(*world);
 
 
     while (!WindowShouldClose()) {

@@ -5,41 +5,7 @@
 #include "../dependencies/json.hpp"
 #include <iostream>
 
-void LoadUIData(World& world){
 
-    auto& asset_repository = world.asset_repository;
-
-    //Load sprites path folder from string
-    std::string sprites_path = "./game_data/textures/ui.json";
-    std::ifstream sprites_file(sprites_path, std::ifstream::binary);
-
-    std::map<int , std::string> ui_map;
-
-    if (sprites_file.is_open()) {
-
-        nlohmann::json sprites_json;
-        sprites_file >> sprites_json;
-
-        // Iteramos por cada elemento del array "sprites_assets"
-        for (const auto& item : sprites_json["ui_assets"]) {
-            // Cada 'item' es un objeto, por ejemplo: {"0" : "ruta.png"}
-            // Lo iteramos para obtener su clave (key) y su valor (value)
-            for (auto it = item.begin(); it != item.end(); ++it) {
-                int id = std::stoi(it.key()); // Convertimos el string "0" a int 0
-                std::string path = it.value();
-
-                ui_map[id] = path; // Lo guardamos en nuestro mapa
-            }
-        }
-    }
-
-
-
-    for(int i = 0; i < ui_map.size(); i++){
-        //std::cout<<sprites_map[i]<<std::endl;
-        asset_repository.ui[i] = LoadTexture(ui_map[i].c_str());
-    }
-}
 
 void LoadPlayerData(World& world){
 
