@@ -1,5 +1,6 @@
 {
     "ai_archetype" : 0,
+    "aggro_range" : 500,
     "entity_type" : "boss_1",
     "running_force": 100,
     "jumping_force": 500,

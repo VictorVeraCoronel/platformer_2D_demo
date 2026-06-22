@@ -1,9 +1,12 @@
+#include "data_loader.h"
 #include "../core/world.h"
 #include <cstdint>
 #include <fstream>
+#include <raylib.h>
 #include <string>
 #include "../dependencies/json.hpp"
 #include <iostream>
+#include "../spawners/entity_spawner.h"
 
 
 
@@ -50,6 +53,8 @@ void LoadPlayerData(World& world){
             entity.sprite_id = json_data["sprite_id"].get<uint16_t>();
             entity.width = json_data["width"].get<uint16_t>();
             entity.height = json_data["width"].get<uint16_t>();
+            entity.mass = json_data["mass"].get<float>();
+            entity.aggro_range = json_data["aggro_range"].get<float>();
 
 
             // Insertamos en el contenedor del World
@@ -60,10 +65,10 @@ void LoadPlayerData(World& world){
     }
 }
 
-void LoadEnemiesData (World& world, std::string dungeon_name){
+void LoadEnemiesData (World& world, std::string world_name){
     //Load enemy path folder from string
     std::string path_1 = "./game_data/enemies/";
-    std::string path_2 = dungeon_name;
+    std::string path_2 = world_name;
     std::string enemies_path = path_1 + path_2;
 
     // Iteramos de forma secuencial por cada archivo de la carpeta
@@ -104,7 +109,9 @@ void LoadEnemiesData (World& world, std::string dungeon_name){
             entity.sprite_width = json_data["sprite_width"].get<uint16_t>();
             entity.sprite_id = json_data["sprite_id"].get<uint16_t>();
             entity.width = json_data["width"].get<uint16_t>();
-            entity.height = json_data["width"].get<uint16_t>();
+            entity.height = json_data["height"].get<uint16_t>();
+            entity.mass = json_data["mass"].get<float>();
+            entity.aggro_range = json_data["aggro_range"].get<float>();
 
             // Insertamos en el contenedor del World
             world.entity_repository[entity_type] = entity;
@@ -115,11 +122,11 @@ void LoadEnemiesData (World& world, std::string dungeon_name){
 
 }
 
-void LoadBossesData (World& world, std::string dungeon_name){
+void LoadBossesData (World& world, std::string world_name){
 
     //Load enemy path folder from string
     std::string path_1 = "./game_data/bosses/";
-    std::string path_2 = dungeon_name;
+    std::string path_2 = world_name;
     std::string enemies_path = path_1 + path_2;
 
     // Iteramos de forma secuencial por cada archivo de la carpeta
@@ -167,6 +174,67 @@ void LoadBossesData (World& world, std::string dungeon_name){
 
             std::cout << "Plantilla cargada con exito: " << entry.path().filename() << " (ID: " << entity_type << ")" << std::endl;
         }
+    }
+
+
+}
+
+void LoadLevelData(World &world, std::string world_name, std::string level_name){
+
+    //Load json file
+    std::string level_path = "./game_data/levels/" + world_name + "/" + level_name + ".json";
+    std::ifstream level_file(level_path, std::ifstream::binary);
+    nlohmann::json level_json;
+    level_file >> level_json;
+
+
+    auto& current_level = world.current_level;
+    //We clear the dungeon in case of duplicating this line of code somewhere.
+    current_level.map.clear();
+
+    //Extracting data from json into variables
+    current_level.width = level_json["width"];
+    current_level.height = level_json["height"];
+
+    auto width = current_level.width;
+    auto height = current_level.height;
+
+    //Load dungeon data in array dungeon
+    current_level.map.resize(width * height);
+    for(int i = 0; i < (current_level.map.size()); i++){
+
+        current_level.map[i] = level_json["map"][i];
+    }
+
+
+    //Spawn all entities
+     auto spawns = level_json["spawns"];
+
+
+
+    //First, we spawn the players
+    for(int i = 0; (i < MAX_PLAYERS && i < spawns.size()); i++){
+        Vector2 position = {spawns[i]["x"], spawns[i]["y"]};
+
+        if(spawns[i]["entity_type"] == "player"){
+            SpawnEntity(world, "player", position, i);
+            std::cout<<"Player entity spawned!!!!"<<std::endl;
+        }
+
+    }
+
+    //Now, we spawn the rest of the entities
+    for(int i = 0; i < spawns.size(); i++){
+        int posicion = MAX_PLAYERS;
+
+        Vector2 position = {spawns[i]["x"], spawns[i]["y"]};
+        std::string entity_type = spawns[i]["entity_type"];
+
+        if(spawns[i]["entity_type"] != "player"){
+           SpawnEntity(world, entity_type, position, posicion);
+        }
+
+        posicion++;
     }
 
 

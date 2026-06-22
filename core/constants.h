@@ -6,7 +6,7 @@
 // DATA THAT WILL ALWAYS BE THE SAME THROUGHOUT THE ENTIRE GAME:
 //----------------------------------------------
 const uint16_t MAX_ENTITIES = 500;
-const uint8_t MAX_PLAYERS = 4;
+const uint8_t MAX_PLAYERS = 5;
 const uint8_t MAX_ASSETS = 100;
 const uint8_t MAX_DATA = 100;
 const float GROUND_FRICTION = 0.85f;

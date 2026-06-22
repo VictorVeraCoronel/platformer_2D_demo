@@ -77,6 +77,8 @@ struct Entity{
     float air_movement_force;
     float HP;
     float anim_speed;
+    float mass;
+    float aggro_range;
 
     uint16_t sprite_id;
     uint16_t sprite_width;

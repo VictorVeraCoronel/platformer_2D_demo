@@ -1,3 +1,4 @@
+#include "asset_loader.h"
 #include "../core/world.h"
 #include <fstream>
 #include <string>

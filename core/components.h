@@ -28,11 +28,12 @@ struct StatsComponent{
     float jumping_force[MAX_ENTITIES] = {};
     float running_force[MAX_ENTITIES] = {};
     float air_movement_force[MAX_ENTITIES] = {};
+    float aggro_range[MAX_ENTITIES] = {};
 
 };
 
 struct InputComponent{
-    bool active[MAX_PLAYERS];
+    bool active[MAX_PLAYERS] = {};
     MoveIntentHorizontal move_intent[MAX_PLAYERS] = {};
     bool jump_pressed[MAX_PLAYERS] = {};
     bool jump_released[MAX_PLAYERS] = {};
@@ -55,15 +56,14 @@ struct RenderComponent{
 };
 
 struct AnimationComponent{
-    bool active[MAX_ENTITIES] = {};
-    uint8_t n_frames[MAX_ENTITIES] = {};
-    uint8_t current_frame[MAX_ENTITIES] = {};
-    uint8_t asset_width[MAX_ENTITIES] = {};
-    uint8_t asset_height[MAX_ENTITIES] = {};
-
+    float anim_speed[MAX_ENTITIES] = {};
     float timer[MAX_ENTITIES] = {};
     float speed[MAX_ENTITIES] = {};
 
+    bool active[MAX_ENTITIES] = {};
+
+    uint8_t n_frames[MAX_ENTITIES] = {};
+    uint8_t current_frame[MAX_ENTITIES] = {};
     ActionState action_state[MAX_ENTITIES] = {};
     Direction direction[MAX_ENTITIES] = {};
 

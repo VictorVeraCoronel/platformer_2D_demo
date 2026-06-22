@@ -1,5 +1,6 @@
 {
     "ai_archetype" : 0,
+    "aggro_range": 0,
     "entity_type" : "player",
     "running_force": 100,
     "jumping_force": 500,
@@ -11,6 +12,7 @@
     "sprite_width" : 32,
     "sprite_height" : 32,
     "width": 32,
-    "height": 32
+    "height": 32,
+    "mass":1
 
 }
