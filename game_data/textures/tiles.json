@@ -1,5 +1,5 @@
 {
     "tiles_assets" : [
-        { "0" : "assets/tiles/example.png" }
+        { "0" : "assets/tiles/floor.png" }
     ]
 }

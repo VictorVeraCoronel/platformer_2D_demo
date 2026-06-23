@@ -23,12 +23,14 @@ void LoadGameData(World& world){
     LoadUIAssets(world);
     LoadSpriteAssets(world);
     LoadTileAssets(world);
+    LoadWallpaperAssets(world);
 
     LoadLevelData(world, "world_1", "level_1");
 }
 
 int main(){
-    InitWindow(1600, 900, "platformer_2D");
+    InitWindow(1920, 1080, "platformer_2D");
+    ToggleBorderlessWindowed();
     SetTargetFPS(60.0f);
 
     //initialization
@@ -67,25 +69,27 @@ int main(){
             acumulador -= dt;
         }
 
-
-        // // RENDER LOOP (144 HZ)
-        // BeginDrawing();
-        // ClearBackground(RAYWHITE);
-        //
-        //     RenderCore(*world);
-        //     //RenderUISystem(world);
-        //
-        // EndDrawing();
-
-
         // RENDER LOOP (144 HZ)
         BeginTextureMode(virtual_screen.target_render_texture);
             ClearBackground(RAYWHITE);
 
             BeginMode2D(camera);
 
+                float fondo_x = camera.target.x * 0.2f;
+                float fondo_y = camera.target.y * 0.2f;
+
+                for (int i = -1; i < 5; i++) {
+
+                    for(int j = -1; j < 5; j++){
+                        float ancho_fondo = 3840.0f;
+                        float alto_fondo = 2160.0f;
+                        DrawTexture(world->asset_repository.wallpaper[0], fondo_x + (i * ancho_fondo), fondo_y + (j * alto_fondo), WHITE);
+                    }
+
+                }
+
                 FollowCamera(*world, camera, dt);
-                RenderCore(*world);
+                RenderCore(*world, camera);
 
             EndMode2D();
 

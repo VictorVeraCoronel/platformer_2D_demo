@@ -18,12 +18,12 @@ void UpdatePhysics(World& world, float dt){
         if (!physics.active[i]) continue;//Performance filter
 
         //Check if player touchs ground
-        if(physics.positions[i].y >= (850-256) && !physics.is_grounded[i]){
+        if(physics.positions[i].y >= (1200-256) && !physics.is_grounded[i]){
             physics.velocities[i].y = 0;
             physics.is_grounded[i] = true;
         }
 
-        if(physics.positions[i].y < (850-256)){
+        if(physics.positions[i].y < (1200-256)){
             physics.is_grounded[i] = false;
         }
 

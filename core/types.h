@@ -62,12 +62,38 @@ struct Level{
 
     std::vector<uint8_t> map;
 
+    inline Vector2 GetTileCoords(float world_x, float world_y) const {
+        return Vector2{
+            static_cast<float>(static_cast<int>(world_x / TILE_SIZE)),
+            static_cast<float>(static_cast<int>(world_y / TILE_SIZE))
+        };
+    }
+
+    inline Vector2 TileIndexToVector2(uint16_t index) const {
+        uint16_t row = index / width;
+        uint16_t col = index % width;
+
+        return Vector2{
+            static_cast<float>(static_cast<int>(col * TILE_SIZE)),
+            static_cast<float>(static_cast<int>(row * TILE_SIZE))
+        };
+    }
+
+    inline uint8_t GetTileAtPosition(float x, float y) const {
+        if (x < 0 || x >= width*TILE_SIZE || y < 0 || y >= height*TILE_SIZE) {
+            return 0;
+        }
+
+        return (y * width) + x;
+    }
+
 };
 
 struct AssetRepository{
     Texture2D sprite[MAX_ASSETS];
     Texture2D tile[MAX_ASSETS];
     Texture2D ui[MAX_ASSETS];
+    Texture2D wallpaper[MAX_ASSETS];
 
 };
 

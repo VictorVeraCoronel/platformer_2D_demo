@@ -8,3 +8,5 @@ void LoadUIAssets(World& world);
 void LoadSpriteAssets(World &world);
 
 void LoadTileAssets(World &world);
+
+void LoadWallpaperAssets(World &world);

@@ -115,3 +115,41 @@ void LoadTileAssets(World &world){
     }
 
 }
+
+
+void LoadWallpaperAssets(World &world){
+    auto& asset_repository = world.asset_repository;
+
+    //Load tiles path folder from string
+    std::string wallpapers_path = "./game_data/textures/wallpapers.json";
+
+    std::ifstream wallpapers_file(wallpapers_path, std::ifstream::binary);
+
+    std::map<int , std::string> wallpaper_map;
+
+    if (wallpapers_file.is_open()) {
+
+        nlohmann::json wallpaper_json;
+        wallpapers_file >> wallpaper_json;
+
+        // Iteramos por cada elemento del array "sprites_assets"
+        for (const auto& item : wallpaper_json["wallpaper_assets"]) {
+            // Cada 'item' es un objeto, por ejemplo: {"0" : "ruta.png"}
+            // Lo iteramos para obtener su clave (key) y su valor (value)
+            for (auto it = item.begin(); it != item.end(); ++it) {
+                int id = std::stoi(it.key()); // Convertimos el string "0" a int 0
+                std::string path = it.value();
+
+                wallpaper_map[id] = path; // Lo guardamos en nuestro mapa
+            }
+        }
+    }
+
+
+
+    for(int i = 0; i < wallpaper_map.size(); i++){
+        std::cout<<wallpaper_map[i]<<std::endl;
+        asset_repository.wallpaper[i] = LoadTexture(wallpaper_map[i].c_str());
+    }
+
+}
