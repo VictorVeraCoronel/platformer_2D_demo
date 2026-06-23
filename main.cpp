@@ -1,16 +1,18 @@
+#include <cmath>
 #include <memory>
 #include "./core/world.h"
 #include "./systems/logic/physics_system.h"
 #include "./systems/logic/gameplay_system.h"
 #include "./systems/logic/input_system.h"
-
 #include "./systems/render/render_core.h"
+#include "./systems/render/camera_manager.h"
 
-#include "core/constants.h"
+#include "core/types.h"
 #include "loaders/data_loader.h"
 #include "loaders/asset_loader.h"
 
 #include <iostream>
+#include <raylib.h>
 
 void LoadGameData(World& world){
 
@@ -26,61 +28,36 @@ void LoadGameData(World& world){
 }
 
 int main(){
+    InitWindow(1600, 900, "platformer_2D");
+    SetTargetFPS(60.0f);
 
+    //initialization
+    Camera2D camera = { 0 };
     std::unique_ptr<World> world = std::make_unique<World>();
     LoadGameData(*world);
 
-    //Testing
-    // world->physics.active[0] = true;
-    // world->stats.active[0] = true;
-    // world->inputs.active[0] = true;
-    // world->renders.active[0] = true;
-    // world->physics.positions[0].x = 50.0f;
-    // world->physics.positions[0].y = 50.0f;
-    // world->physics.mass[0] = 1;
-    // world->stats.jumping_force[0] = 60000.0f;
-    // world->stats.running_force[0] = 7500.0f;
-    // world->stats.air_movement_force[0] = 1000.0f;
-
-    std::cout<<world->physics.active[0]<<std::endl;
-    std::cout<<world->stats.active[0]<<std::endl;
-    std::cout<<world->inputs.active[0]<<std::endl;
-    std::cout<<world->renders.active[0]<<std::endl;
-
-    std::cout<<world->physics.positions[0].x<<std::endl;
-    std::cout<<world->physics.positions[0].y<<std::endl;
-
-
-    std::cout<<world->physics.active[MAX_PLAYERS]<<std::endl;
-    std::cout<<world->stats.active[MAX_PLAYERS]<<std::endl;
-    std::cout<<world->renders.active[MAX_PLAYERS]<<std::endl;
-
-    std::cout<<world->physics.positions[MAX_PLAYERS].x<<std::endl;
-    std::cout<<world->physics.positions[MAX_PLAYERS].y<<std::endl;
-
-
-
-
-
-    InitWindow(1600, 900, "platformer_2D");
-    SetTargetFPS(60.0f);
+    InitCameraManager(*world, camera);
 
     const float dt = 1.0f / 60.0f; //
     float acumulador = 0.0f;
 
+    VirtualScreen virtual_screen;
+    virtual_screen.width = 1920;
+    virtual_screen.height = 1080;
+    virtual_screen.target_render_texture = LoadRenderTexture(1920, 1080);
 
 
 
     while (!WindowShouldClose()) {
+        //std::cout<<world->current_level.map[0]<<std::endl;
 
         float frame_time = GetFrameTime();
-
         if (frame_time > 0.25f) frame_time = 0.25f;
-
         acumulador += frame_time;
 
 
         UpdateInput(*world);
+
         // LOGIC LOOP (60 HZ)
         while (acumulador >= dt) {
 
@@ -90,15 +67,58 @@ int main(){
             acumulador -= dt;
         }
 
+
+        // // RENDER LOOP (144 HZ)
+        // BeginDrawing();
+        // ClearBackground(RAYWHITE);
+        //
+        //     RenderCore(*world);
+        //     //RenderUISystem(world);
+        //
+        // EndDrawing();
+
+
         // RENDER LOOP (144 HZ)
+        BeginTextureMode(virtual_screen.target_render_texture);
+            ClearBackground(RAYWHITE);
+
+            BeginMode2D(camera);
+
+                FollowCamera(*world, camera, dt);
+                RenderCore(*world);
+
+            EndMode2D();
+
+        EndTextureMode();
+
+
+        //Now we apply the scale to the virtual texture and draw it after scaling it correctly
         BeginDrawing();
-        ClearBackground(RAYWHITE);
+        ClearBackground(BLACK);
 
-            RenderCore(*world);
-            //RenderUISystem(world);
+        // Calculate the scale
+        float scale = fminf((float)GetScreenWidth() / virtual_screen.width,
+                            (float)GetScreenHeight() / virtual_screen.height);
 
+        // We draw the virtual texture
+        DrawTexturePro(
+            virtual_screen.target_render_texture.texture,
+            // Origen: La textura de Raylib está invertida en el eje Y por convención de OpenGL, usamos el menos (-)
+            Rectangle{ 0.0f, 0.0f, (float)virtual_screen.target_render_texture.texture.width, (float)-virtual_screen.target_render_texture.texture.height },
+                       // Destino: Centrado en la pantalla real actual del cliente
+                       Rectangle{
+                           ((float)GetScreenWidth() - ((float)virtual_screen.width * scale)) * 0.5f,
+                       ((float)GetScreenHeight() - ((float)virtual_screen.height * scale)) * 0.5f,
+                       (float)virtual_screen.width * scale,
+                       (float)virtual_screen.height * scale
+                       },
+                       Vector2{ 0, 0 },
+                       0.0f,
+                       WHITE
+        );
         EndDrawing();
     }
+
 
     CloseWindow();
     return 0;

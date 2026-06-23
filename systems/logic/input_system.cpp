@@ -1,5 +1,6 @@
 #include "../../core/world.h"
 #include <raylib.h>
+#include <iostream>
 
 void UpdateInput(World& world){
 
@@ -7,6 +8,7 @@ void UpdateInput(World& world){
 
     for(int i = 0; i < MAX_PLAYERS; i++){
         if (!inputs.active[i]) continue;//Performance check
+        //std::cout<<"Inputeooo: "<<i<<std::endl;
 
         int PLAYER = i;
         switch (PLAYER){

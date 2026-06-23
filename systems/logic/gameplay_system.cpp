@@ -19,6 +19,8 @@ void UpdateGameplay(World& world){
     for(int i = 0; i < MAX_PLAYERS; i++){
         if(!inputs.active[i]) continue;
 
+        //std::cout<<"Gamepleooo: "<<i<<std::endl;
+
         //Horizontal movement
         MoveIntentHorizontal move_intent = inputs.move_intent[i];
 

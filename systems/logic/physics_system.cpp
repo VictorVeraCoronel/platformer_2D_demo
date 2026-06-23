@@ -12,6 +12,8 @@ void UpdatePhysics(World& world, float dt){
 
     for(int i = 0; i < MAX_ENTITIES; i++){
         //std::cout<<(physics.active[i])<<std::endl;
+        //std::cout<<"Fisiqueoooo: "<<i<<std::endl;
+
 
         if (!physics.active[i]) continue;//Performance filter
 

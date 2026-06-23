@@ -60,7 +60,7 @@ struct Level{
     uint16_t width;
     uint16_t height;
 
-    std::vector<int8_t> map;
+    std::vector<uint8_t> map;
 
 };
 
@@ -88,4 +88,15 @@ struct Entity{
     uint8_t n_animation_frames;
 
     AIArchetype ai_archetype;
+};
+
+struct VirtualScreen{
+
+    int width;
+    int height;
+
+    // Middleman texture before rendering to real screen
+    RenderTexture2D target_render_texture;
+
+
 };

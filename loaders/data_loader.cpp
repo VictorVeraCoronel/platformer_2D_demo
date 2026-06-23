@@ -196,15 +196,18 @@ void LoadLevelData(World &world, std::string world_name, std::string level_name)
     current_level.width = level_json["width"];
     current_level.height = level_json["height"];
 
+
+
     auto width = current_level.width;
     auto height = current_level.height;
 
+
+
     //Load dungeon data in array dungeon
     current_level.map.resize(width * height);
-    for(int i = 0; i < (current_level.map.size()); i++){
+    current_level.map = level_json["map"].get<std::vector<uint8_t>>();
 
-        current_level.map[i] = level_json["map"][i];
-    }
+    std::cout<<width<<"  "<<height<<" "<<static_cast<int>(current_level.map[0])<<std::endl;
 
 
     //Spawn all entities
