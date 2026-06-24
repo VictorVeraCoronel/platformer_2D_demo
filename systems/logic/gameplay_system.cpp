@@ -61,6 +61,7 @@ void UpdateGameplay(World& world){
         if(inputs.jump_pressed[i] && physics.is_grounded[i]){
 
             forces_y -= jumping_force;
+            physics.is_grounded[i] = false;
         }
 
         ClearInput(inputs,i);

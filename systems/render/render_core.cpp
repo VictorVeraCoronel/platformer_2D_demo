@@ -20,6 +20,7 @@ void RenderCore(World& world, Camera2D& camera){
         Rectangle rectangle = {pos_x, pos_y, width ,height};
         DrawRectangleRec(rectangle, RED);
 
+
     }
 
      RenderMap(world, camera);

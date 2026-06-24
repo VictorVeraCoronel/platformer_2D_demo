@@ -24,5 +24,5 @@ void InitCameraManager(World &world, Camera2D &camera){
 
     camera.target = (Vector2){ world.physics.positions[0].x, world.physics.positions[0].y};
     camera.zoom = 0.66f;
-    camera.offset = (Vector2){ 1920.0f/2-64, 1080.0f/1.4-64 };
+    camera.offset = (Vector2){ 1920.0f/2-64, 1080.0f/2.33-64 };
 }

@@ -95,7 +95,14 @@ void UpdatePhysics(World& world, float dt){
             int index_left = level.GetTileIndexAtPosition(pos_x, (next_pos_y + size_y));
             int index_right = level.GetTileIndexAtPosition((pos_x + size_x - 1),(next_pos_y + size_y));
 
-            if (level.map[index_left] > 0 || level.map[index_right] > 0)collision_y = true; is_grounded = true;
+            if (level.map[index_left] > 0 || level.map[index_right] > 0){
+                int tile_row = (int)((next_pos_y + size_y) / TILE_SIZE);
+                pos_y = (tile_row * TILE_SIZE) - size_y;
+
+
+                collision_y = true;
+                is_grounded = true;
+            }
         }
         else if (vel_y < 0) {
             int index_left  = level.GetTileIndexAtPosition(pos_x , next_pos_y);
