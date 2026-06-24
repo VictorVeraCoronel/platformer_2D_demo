@@ -59,32 +59,46 @@ enum class GameState : uint8_t {
 struct Level{
     uint16_t width;
     uint16_t height;
+    Vector2 respawn_point;
 
     std::vector<uint8_t> map;
 
-    inline Vector2 GetTileCoords(float world_x, float world_y) const {
-        return Vector2{
-            static_cast<float>(static_cast<int>(world_x / TILE_SIZE)),
-            static_cast<float>(static_cast<int>(world_y / TILE_SIZE))
-        };
-    }
+    inline uint16_t GetTileIndexAtPosition(float pixel_x, float pixel_y) const {
 
-    inline Vector2 TileIndexToVector2(uint16_t index) const {
-        uint16_t row = index / width;
-        uint16_t col = index % width;
+        // Negative pixels are out of bounds
+        if (pixel_x < 0.0f || pixel_y < 0.0f) return 0;
 
-        return Vector2{
-            static_cast<float>(static_cast<int>(col * TILE_SIZE)),
-            static_cast<float>(static_cast<int>(row * TILE_SIZE))
-        };
-    }
+        // We determine tile cells using the pixels and tile size
+        int cell_x = static_cast<int>(pixel_x) / TILE_SIZE;
+        int cell_y = static_cast<int>(pixel_y) / TILE_SIZE;
 
-    inline uint8_t GetTileAtPosition(float x, float y) const {
-        if (x < 0 || x >= width*TILE_SIZE || y < 0 || y >= height*TILE_SIZE) {
+        // Security check for out of bounds
+        if (cell_x >= width || cell_y >= height) {
             return 0;
         }
 
-        return (y * width) + x;
+        // Calculate index of the map
+        return ((cell_y * width) + cell_x);
+    }
+
+    inline uint8_t GetTileValueAtPosition(float pixel_x, float pixel_y) {
+        // Negative pixels are out of bounds
+        if (pixel_x < 0.0f || pixel_y < 0.0f) return 0;
+
+        // We determine tile cells using the pixels and tile size
+        int cell_x = static_cast<int>(pixel_x) / TILE_SIZE;
+        int cell_y = static_cast<int>(pixel_y) / TILE_SIZE;
+
+        // Security check for out of bounds
+        if (cell_x >= width || cell_y >= height) {
+            return 0;
+        }
+
+        // Calculate index of the map
+        int index = (cell_y * width) + cell_x;
+
+        // Return map value at index
+        return map[index];
     }
 
 };

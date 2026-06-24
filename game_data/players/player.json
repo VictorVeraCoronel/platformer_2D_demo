@@ -9,10 +9,10 @@
     "sprite_id" : 0,
     "n_animation_frames" : 8,
     "anim_speed" : 0.12,
-    "sprite_width" : 32,
-    "sprite_height" : 32,
-    "width": 32,
-    "height": 32,
+    "sprite_width" : 128,
+    "sprite_height" : 256,
+    "width": 128,
+    "height": 256,
     "mass":1
 
 }

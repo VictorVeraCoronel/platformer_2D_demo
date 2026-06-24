@@ -16,6 +16,10 @@ struct PhysicsComponent{
     float mass[MAX_ENTITIES] = {};
     bool is_grounded[MAX_ENTITIES] = {};
 
+    // Components that will interact with other systems, such as gameplay
+    Vector2 desired_positions[MAX_ENTITIES] = {};
+    bool has_desired_position[MAX_ENTITIES] = {};
+
 };
 
 

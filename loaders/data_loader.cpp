@@ -52,7 +52,7 @@ void LoadPlayerData(World& world){
             entity.sprite_width = json_data["sprite_width"].get<uint16_t>();
             entity.sprite_id = json_data["sprite_id"].get<uint16_t>();
             entity.width = json_data["width"].get<uint16_t>();
-            entity.height = json_data["width"].get<uint16_t>();
+            entity.height = json_data["height"].get<uint16_t>();
             entity.mass = json_data["mass"].get<float>();
             entity.aggro_range = json_data["aggro_range"].get<float>();
 
@@ -167,7 +167,7 @@ void LoadBossesData (World& world, std::string world_name){
             entity.sprite_width = json_data["sprite_width"].get<uint16_t>();
             entity.sprite_id = json_data["sprite_id"].get<uint16_t>();
             entity.width = json_data["width"].get<uint16_t>();
-            entity.height = json_data["width"].get<uint16_t>();
+            entity.height = json_data["height"].get<uint16_t>();
 
             // Insertamos en el contenedor del World
             world.entity_repository[entity_type] = entity;
@@ -189,26 +189,22 @@ void LoadLevelData(World &world, std::string world_name, std::string level_name)
 
 
     auto& current_level = world.current_level;
+    uint16_t& width = current_level.width;
+    uint16_t& height = current_level.height;
+    Vector2& respawn_point = current_level.respawn_point;
+
     //We clear the dungeon in case of duplicating this line of code somewhere.
     current_level.map.clear();
 
     //Extracting data from json into variables
-    current_level.width = level_json["width"];
-    current_level.height = level_json["height"];
-
-
-
-    auto width = current_level.width;
-    auto height = current_level.height;
-
+    width = level_json["width"];
+    height = level_json["height"];
+    respawn_point = {level_json["respawn_x"].get<float>(), level_json["respawn_y"].get<float>()};
 
 
     //Load dungeon data in array dungeon
     current_level.map.resize(width * height);
     current_level.map = level_json["map"].get<std::vector<uint8_t>>();
-
-    std::cout<<width<<"  "<<height<<" "<<static_cast<int>(current_level.map[0])<<std::endl;
-
 
     //Spawn all entities
      auto spawns = level_json["spawns"];
@@ -228,16 +224,16 @@ void LoadLevelData(World &world, std::string world_name, std::string level_name)
 
     //Now, we spawn the rest of the entities
     for(int i = 0; i < spawns.size(); i++){
-        int posicion = MAX_PLAYERS;
+        int initial_enemy_index = MAX_PLAYERS;
 
         Vector2 position = {spawns[i]["x"], spawns[i]["y"]};
         std::string entity_type = spawns[i]["entity_type"];
 
         if(spawns[i]["entity_type"] != "player"){
-           SpawnEntity(world, entity_type, position, posicion);
+           SpawnEntity(world, entity_type, position, initial_enemy_index);
         }
 
-        posicion++;
+        initial_enemy_index++;
     }
 
 
