@@ -26,7 +26,9 @@ void UpdatePhysics(World& world, float dt){
         float& forces_y = physics.forces[i].y;
         float& size_x = physics.sizes[i].x;
         float& size_y = physics.sizes[i].y;
+        float& coyote_timer = physics.coyote_timer[i];
         bool& is_grounded = physics.is_grounded[i];
+        bool& is_on_wall = physics.is_on_wall[i];
 
         float entity_mass = (physics.mass[i] > 0.0f) ? physics.mass[i] : 1.0f;
         float current_gravity =(physics.velocities[i].y > 0.0f) ? gravity * fall_multiplier : gravity;
@@ -73,8 +75,14 @@ void UpdatePhysics(World& world, float dt){
 
         if (collision_x) {
             vel_x = 0.0f;
+
+            if (!is_grounded && vel_y > 0.0f) {
+                is_on_wall = true;
+            }
+
         } else {
             pos_x = next_pos_x;
+            is_on_wall = false;
         }
 
         // ---------------
@@ -102,7 +110,9 @@ void UpdatePhysics(World& world, float dt){
 
                 collision_y = true;
                 is_grounded = true;
+                coyote_timer = 0.15f;
             }
+
         }
         else if (vel_y < 0) {
             int index_left  = level.GetTileIndexAtPosition(pos_x , next_pos_y);
@@ -115,7 +125,7 @@ void UpdatePhysics(World& world, float dt){
             vel_y = 0.0f;
         } else {
             pos_y = next_pos_y;
-            if (vel_y > 0.1f) is_grounded = false;
+            if (vel_y > 0.1f) is_grounded = false;coyote_timer -= dt;
         }
 
         // ---------------
@@ -127,7 +137,10 @@ void UpdatePhysics(World& world, float dt){
         //Apply frictions with ground and air
         if(is_grounded){
             vel_x *=  GROUND_FRICTION;
-        }else{
+        }else if(is_on_wall){
+            vel_y *= WALL_FRICTION;
+        }
+        else{
             vel_x *=  AIR_FRICTION;
         }
 

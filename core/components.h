@@ -15,6 +15,8 @@ struct PhysicsComponent{
     Vector2 forces[MAX_ENTITIES] = {};
     float mass[MAX_ENTITIES] = {};
     bool is_grounded[MAX_ENTITIES] = {};
+    bool is_on_wall[MAX_ENTITIES] = {};
+    float coyote_timer[MAX_ENTITIES] = {};//Jump grace time
 
     // Components that will interact with other systems, such as gameplay
     Vector2 desired_positions[MAX_ENTITIES] = {};
@@ -41,7 +43,6 @@ struct InputComponent{
     MoveIntentHorizontal move_intent[MAX_PLAYERS] = {};
     bool jump_pressed[MAX_PLAYERS] = {};
     bool jump_released[MAX_PLAYERS] = {};
-    float coyote_timer[MAX_PLAYERS] = {};
     float jump_buffer_timer[MAX_PLAYERS] = {};
     bool run_pressed[MAX_PLAYERS] = {};
 

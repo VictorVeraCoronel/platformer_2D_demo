@@ -63,8 +63,9 @@ int main(){
         // LOGIC LOOP (60 HZ)
         while (acumulador >= dt) {
 
-            UpdatePhysics(*world, dt);
             UpdateGameplay(*world);
+            UpdatePhysics(*world, dt);
+
 
             acumulador -= dt;
         }

@@ -24,12 +24,17 @@ void UpdateGameplay(World& world){
         MoveIntentHorizontal move_intent = inputs.move_intent[i];
         float& forces_x = physics.forces[i].x;
         float& forces_y = physics.forces[i].y;
+        float& velocities_x = physics.velocities[i].x;
+        float& velocities_y = physics.velocities[i].y;
+        float& coyote_timer = physics.coyote_timer[i];
         float& running_force = stats.running_force[i];
         float& jumping_force = stats.jumping_force[i];
         float& air_movement_force = stats.air_movement_force[i];
 
 
 
+
+        //Horizontal movement
         switch(move_intent){
 
             case MoveIntentHorizontal::LEFT:{
@@ -57,17 +62,23 @@ void UpdateGameplay(World& world){
 
         }
 
-        //Vertical movement
-        if(inputs.jump_pressed[i] && physics.is_grounded[i]){
-
+        //Jump force application
+        if(inputs.jump_pressed[i] && coyote_timer > 0.01f){
             forces_y -= jumping_force;
             physics.is_grounded[i] = false;
+            coyote_timer = 0.0f;
+        }
+
+        //Variable jump / Halve jumping speed
+        if(inputs.jump_released[i] && velocities_y < 0){
+            velocities_y *= 0.5f;
         }
 
         ClearInput(inputs,i);
 
 
 
+        //Level reset if out of bounds.
         float& pos_x = physics.positions[i].x;
         float& pos_y = physics.positions[i].y;
         float& desired_pos_x = physics.desired_positions[i].x;
