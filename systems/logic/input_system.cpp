@@ -2,7 +2,7 @@
 #include <raylib.h>
 #include <iostream>
 
-void UpdateInput(World& world){
+void UpdateInput(World& world, float dt){
 
     auto& inputs = world.inputs;
 
@@ -11,12 +11,21 @@ void UpdateInput(World& world){
         //std::cout<<"Inputeooo: "<<i<<std::endl;
 
         int PLAYER = i;
+        float& horizontal_lock_timer = inputs.horizontal_lock_timer[i];
+        MoveIntentHorizontal& move_intent = inputs.move_intent[i];
+
         switch (PLAYER){
 
             case 0:{
                 //HORIZONTAL
-                if(IsKeyDown(KEY_D)) inputs.move_intent[i] = MoveIntentHorizontal::RIGHT;
-                if(IsKeyDown(KEY_A)) inputs.move_intent[i] = MoveIntentHorizontal::LEFT;
+                if(horizontal_lock_timer > 0.0f){
+                    horizontal_lock_timer -= dt;
+                    move_intent = MoveIntentHorizontal::NONE;
+                }else{
+                    if(IsKeyDown(KEY_D)) inputs.move_intent[i] = MoveIntentHorizontal::RIGHT;
+                    if(IsKeyDown(KEY_A)) inputs.move_intent[i] = MoveIntentHorizontal::LEFT;
+
+                }
 
                 //JUMPING
                 if(IsKeyPressed(KEY_SPACE)) inputs.jump_pressed[i] = true;

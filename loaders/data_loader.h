@@ -2,6 +2,9 @@
 #include "../core/world.h"
 #include <iostream>
 #include <string>
+#include "../dependencies/json.hpp"
+
+void ParseJsonToEntity(const nlohmann::json& json_data, Entity& entity);
 
 void LoadPlayerData(World& world);
 

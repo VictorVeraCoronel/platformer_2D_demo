@@ -27,26 +27,30 @@ void LoadGameData(World& world){
 
     LoadLevelData(world, "world_1", "level_1");
 }
-
-int main(){
-    InitWindow(1920, 1080, "platformer_2D");
-    ToggleBorderlessWindowed();
-    SetTargetFPS(60.0f);
-
-    //initialization
-    Camera2D camera = { 0 };
-    std::unique_ptr<World> world = std::make_unique<World>();
-    LoadGameData(*world);
-
-    InitCameraManager(*world, camera);
-
-    const float dt = 1.0f / 60.0f; //
-    float acumulador = 0.0f;
-
+VirtualScreen LoadVirtualScreen(){
     VirtualScreen virtual_screen;
     virtual_screen.width = 1920;
     virtual_screen.height = 1080;
     virtual_screen.target_render_texture = LoadRenderTexture(1920, 1080);
+
+    return virtual_screen;
+}
+
+int main(){
+    //Graphic initialization
+    InitWindow(1920, 1080, "platformer_2D");
+    ToggleBorderlessWindowed();
+    SetTargetFPS(60.0f);
+    Camera2D camera;
+    VirtualScreen virtual_screen = LoadVirtualScreen();
+
+    //Initialization
+    std::unique_ptr<World> world = std::make_unique<World>();
+    LoadGameData(*world);
+    InitCameraManager(*world, camera);
+    const float dt = 1.0f / 60.0f; //
+    float acumulador = 0.0f;
+
 
 
 
@@ -58,13 +62,13 @@ int main(){
         acumulador += frame_time;
 
 
-        UpdateInput(*world);
+        UpdateInput(*world, dt);
 
         // LOGIC LOOP (60 HZ)
         while (acumulador >= dt) {
 
-            UpdateGameplay(*world);
             UpdatePhysics(*world, dt);
+            UpdateGameplay(*world);
 
 
             acumulador -= dt;

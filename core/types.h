@@ -15,6 +15,12 @@ enum class MoveIntentHorizontal : int8_t {
     RIGHT = 1
 };
 
+enum class WallCollision : int8_t{
+    LEFT = -1,
+    NONE = 0,
+    RIGHT = 1
+};
+
 enum class AIArchetype : uint8_t {
     MELEE_CHASER = 0,
     RANGED_KITER = 1

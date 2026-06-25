@@ -31,9 +31,7 @@ void RenderCore(World& world, Camera2D& camera){
 
 void RenderMap(World& world, Camera2D& camera){
 
-    auto& renders = world.renders;
     auto& level = world.current_level;
-
 
     //Determine initial tile_x and initial tile_y of the camera.
     int initial_x = (std::max(0, (static_cast<int>(camera.target.x - 1500)))) / (int)TILE_SIZE;

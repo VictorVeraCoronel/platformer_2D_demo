@@ -14,31 +14,30 @@ void UpdateGameplay(World& world){
     auto& stats = world.stats;
     auto& inputs = world.inputs;
     auto& physics = world.physics;
-    auto& gravity = world.gravity;
     auto& level = world.current_level;
 
     for(int i = 0; i < MAX_PLAYERS; i++){
         if(!inputs.active[i]) continue;
 
         // Useful data references
-        MoveIntentHorizontal move_intent = inputs.move_intent[i];
+        MoveIntentHorizontal& move_intent = inputs.move_intent[i];
+        bool& jump_pressed = inputs.jump_pressed[i];
+        bool& jump_released = inputs.jump_released[i];
         float& forces_x = physics.forces[i].x;
         float& forces_y = physics.forces[i].y;
-        float& velocities_x = physics.velocities[i].x;
-        float& velocities_y = physics.velocities[i].y;
+        float& velocity_y = physics.velocities[i].y;
         float& coyote_timer = physics.coyote_timer[i];
+        WallCollision& wall_collision = physics.wall_collision[i];
+        bool& is_grounded = physics.is_grounded[i];
         float& running_force = stats.running_force[i];
         float& jumping_force = stats.jumping_force[i];
         float& air_movement_force = stats.air_movement_force[i];
-
-
-
 
         //Horizontal movement
         switch(move_intent){
 
             case MoveIntentHorizontal::LEFT:{
-                if(physics.is_grounded[i]){
+                if(is_grounded){
                     forces_x -= running_force;
                 }else{
                     forces_x -= air_movement_force;
@@ -47,7 +46,7 @@ void UpdateGameplay(World& world){
             }
 
             case MoveIntentHorizontal::RIGHT:{
-                if(physics.is_grounded[i]){
+                if(is_grounded){
                     forces_x += running_force;
                 }else{
                     forces_x += air_movement_force;
@@ -63,29 +62,49 @@ void UpdateGameplay(World& world){
         }
 
         //Jump force application
-        if(inputs.jump_pressed[i] && coyote_timer > 0.01f){
+        if(jump_pressed && coyote_timer > 0.01f && wall_collision == WallCollision::NONE){
             forces_y -= jumping_force;
-            physics.is_grounded[i] = false;
+            is_grounded = false;
             coyote_timer = 0.0f;
         }
 
+        //Wall jump force application from left wall
+        if(jump_pressed && wall_collision == WallCollision::LEFT && velocity_y > 0){
+            forces_y -= jumping_force;
+            forces_x += running_force*3;
+            is_grounded = false;
+            coyote_timer = 0.0f;
+            inputs.horizontal_lock_timer[i] = 0.2f;
+            wall_collision = WallCollision::NONE;
+        }
+
+        //Wall jump force application from right wall
+        if(jump_pressed && wall_collision == WallCollision::RIGHT && velocity_y > 0){
+            forces_y -= jumping_force;
+            forces_x -= running_force*3;
+            is_grounded = false;
+            coyote_timer = 0.0f;
+            inputs.horizontal_lock_timer[i] = 0.2f;
+            wall_collision = WallCollision::NONE;
+        }
+
         //Variable jump / Halve jumping speed
-        if(inputs.jump_released[i] && velocities_y < 0){
-            velocities_y *= 0.5f;
+        if(jump_released && velocity_y < 0){
+            velocity_y *= 0.5f;
         }
 
         ClearInput(inputs,i);
 
-
+        //Clear wall collisions
+        physics.wall_collision[i] = WallCollision::NONE;
 
         //Level reset if out of bounds.
-        float& pos_x = physics.positions[i].x;
         float& pos_y = physics.positions[i].y;
         float& desired_pos_x = physics.desired_positions[i].x;
         float& desired_pos_y = physics.desired_positions[i].y;
         bool& has_desired_position = physics.has_desired_position[i];
 
-        if(pos_y > level.height*TILE_SIZE || pos_x > level.width*TILE_SIZE || pos_x < 0){
+        if(pos_y > level.height*TILE_SIZE){
             desired_pos_x = level.respawn_point.x;
             desired_pos_y = level.respawn_point.y;
             has_desired_position = false;
