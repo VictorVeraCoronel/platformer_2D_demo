@@ -39,8 +39,8 @@ VirtualScreen LoadVirtualScreen(){
 
 int main(){
     //Graphic initialization
-    InitWindow(800, 600, "platformer_2D");
-    //ToggleBorderlessWindowed();
+    InitWindow(1920, 1080, "platformer_2D");
+    ToggleBorderlessWindowed();
     SetTargetFPS(144.0f);
     Camera2D camera;
     VirtualScreen virtual_screen = LoadVirtualScreen();

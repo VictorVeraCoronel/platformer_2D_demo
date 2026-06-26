@@ -144,15 +144,18 @@ void ResetOutOfBounds(World& world, int i){
     auto& level = world.current_level;
 
     //Level reset if out of bounds.
+    float& vel_y = physics.velocities[i].y;
     float& pos_y = physics.positions[i].y;
     float& desired_pos_x = physics.desired_positions[i].x;
     float& desired_pos_y = physics.desired_positions[i].y;
     bool& has_desired_position = physics.has_desired_position[i];
 
     if(pos_y > level.height*TILE_SIZE){
+        vel_y = 0; // We reset Y axis velocity to avoid entering walls
         desired_pos_x = level.respawn_point.x;
         desired_pos_y = level.respawn_point.y;
-        has_desired_position = false;
+        has_desired_position = true;
+
     }
 }
 

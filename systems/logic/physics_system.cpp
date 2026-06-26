@@ -24,10 +24,11 @@ void IntegrateForces(World& world, float dt, uint16_t i){
     float entity_mass = (physics.mass[i] > 0.0f) ? physics.mass[i] : 1.0f;
 
     // UPDATE POSITION AS REQUESTED BY GAMEPLAY SYSTEM
-    if(!has_desired_position){
+    if(has_desired_position){
+        std::cout<<"Cambio la posiciooon"<<std::endl;
         pos_x = desired_pos_x;
         pos_y = desired_pos_y;
-        has_desired_position = true;
+        has_desired_position = false;
     }
 
     // APPLY GRAVITY FORCE

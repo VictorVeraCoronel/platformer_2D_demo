@@ -161,7 +161,7 @@ void LoadLevelData(World &world, std::string world_name, std::string level_name)
 
         if(spawns[i]["entity_type"] == "player"){
             SpawnEntity(world, "player", position, i);
-            std::cout<<"Player entity spawned!!!!"<<std::endl;
+            std::cout<<"Player entity spawned!!!! At position: "<<position.x<<"  "<<position.y<<std::endl;
         }
 
     }
@@ -175,6 +175,7 @@ void LoadLevelData(World &world, std::string world_name, std::string level_name)
 
         if(spawns[i]["entity_type"] != "player"){
            SpawnEntity(world, entity_type, position, e_index);
+           std::cout<<entity_type<<" entity spawned!!!! At position: "<<position.x<<"  "<<position.y<<std::endl;
            e_index++;
         }
 
