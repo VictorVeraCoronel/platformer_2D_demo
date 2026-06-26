@@ -8,11 +8,11 @@
     "air_movement_force": 1000.0,
     "hp" : 1.0,
     "sprite_id" : 0,
-    "n_animation_frames" : 8,
-    "anim_speed" : 0.12,
-    "sprite_width" : 128,
+    "n_animation_frames" : 4,
+    "anim_speed" : 0.25,
+    "sprite_width" : 256,
     "sprite_height" : 256,
-    "width": 128,
+    "width": 86,
     "height": 256,
     "mass":1
 

@@ -64,15 +64,14 @@ struct RenderComponent{
 
 struct AnimationComponent{
     float anim_speed[MAX_ENTITIES] = {};
-    float timer[MAX_ENTITIES] = {};
-    float speed[MAX_ENTITIES] = {};
+    uint8_t n_frames[MAX_ENTITIES] = {};
+
 
     bool active[MAX_ENTITIES] = {};
-
-    uint8_t n_frames[MAX_ENTITIES] = {};
+    float timer[MAX_ENTITIES] = {};
     uint8_t current_frame[MAX_ENTITIES] = {};
-    ActionState action_state[MAX_ENTITIES] = {};
-    Direction direction[MAX_ENTITIES] = {};
+    AnimState state[MAX_ENTITIES] = {};
+    AnimDirection direction[MAX_ENTITIES] = {};
 
 };
 

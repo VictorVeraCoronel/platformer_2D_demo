@@ -1,7 +1,12 @@
 #pragma once
 #include "../../core/world.h"
 
-
-void ClearInput(InputComponent& inputs,int i);
-
 void UpdateGameplay(World& world);
+
+void OrderPhysicsFromInput(World& world, int i);
+
+void UpdateAnimationState(World& world, int i);
+
+void ResetOutOfBounds(World& world, int i);
+
+void ClearInput(World& world,int i);

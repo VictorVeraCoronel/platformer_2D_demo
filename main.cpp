@@ -4,6 +4,7 @@
 #include "./systems/logic/physics_system.h"
 #include "./systems/logic/gameplay_system.h"
 #include "./systems/logic/input_system.h"
+#include "./systems/logic/animation_system.h"
 #include "./systems/render/render_core.h"
 #include "./systems/render/camera_manager.h"
 
@@ -66,7 +67,7 @@ int main(){
 
         // LOGIC LOOP (60 HZ)
         while (acumulador >= dt) {
-
+            UpdateAnimationSystem(*world, dt);
             UpdatePhysics(*world, dt);
             UpdateGameplay(*world);
 

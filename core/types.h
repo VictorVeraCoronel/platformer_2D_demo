@@ -26,16 +26,19 @@ enum class AIArchetype : uint8_t {
     RANGED_KITER = 1
 };
 
-enum class ActionState : uint8_t {
+enum class AnimState : uint8_t {
     IDLE = 0,
     RUNNING = 1,
-    ATTACKING = 2,
-    JUMPING = 3,
-    FALLING = 4,
-    WALL_SLIDING = 5
+    JUMPING = 2,
+    FALLING = 3,
+    ATTACKING = 4,
+    DYING = 5,
+    WALL_SLIDING = 6,
+    CROUCH = 7,
+    HURT = 8
 };
 
-enum class Direction : uint8_t {
+enum class AnimDirection : uint8_t {
     LEFT = 0,
     RIGHT = 1
 

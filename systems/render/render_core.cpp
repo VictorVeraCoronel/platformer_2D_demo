@@ -4,27 +4,36 @@
 #include <iostream>
 
 void RenderCore(World& world, Camera2D& camera){
+
+     RenderEntities(world);
+     RenderMap(world, camera);
+
+
+}
+
+void RenderEntities(World& world){
     auto& renders = world.renders;
-    auto& physics = world.physics;
 
     for(int i = 0; i < MAX_ENTITIES; i++){
         if(!renders.active[i]) continue;
 
-        //Useful data references
-        float& pos_x = physics.positions[i].x;
-        float& pos_y = physics.positions[i].y;
-        float width = (float)renders.asset_width[i];
-        float height = (float)renders.asset_height[i];
+        auto& physics = world.physics;
+        auto& anim = world.animations;
+        auto& sprites = world.asset_repository.sprite;
 
-        //Draw rectangle in entity position of entity proportions
-        Rectangle rectangle = {pos_x, pos_y, width ,height};
-        DrawRectangleRec(rectangle, RED);
 
+        float source_x = anim.current_frame[i] * renders.asset_width[i];
+        float source_y = (float)anim.state[i] * renders.asset_height[i];
+        float width_sign = (physics.velocities[i].x < -1.0f) ? -1.0f : 1.0f;
+        Rectangle source_rec = { source_x, source_y, (float)renders.asset_width[i] * width_sign, (float)renders.asset_height[i] };
+
+        Texture2D texture = sprites[renders.asset_id[i]];
+        Rectangle dest_rec = { physics.positions[i].x, physics.positions[i].y, (float)renders.asset_width[i], (float)renders.asset_height[i] };
+        Vector2 origin = { 0.0f, 0.0f };
+
+        DrawTexturePro(texture, source_rec, dest_rec, origin, 0.0f, WHITE);
 
     }
-
-     RenderMap(world, camera);
-
 
 }
 
