@@ -20,6 +20,7 @@ void SpawnEntity(World& world, std::string entity_type, Vector2 position, uint16
     world.stats.active[id] = true;
     world.stats.hp[id] = world.entity_repository[entity_type].HP;
     world.stats.jumping_force[id] = world.entity_repository[entity_type].jumping_force;
+    world.stats.wall_jumping_force[id] = world.entity_repository[entity_type].wall_jumping_force;
     world.stats.running_force[id] = world.entity_repository[entity_type].running_force;
     world.stats.air_movement_force[id] = world.entity_repository[entity_type].air_movement_force;
     world.stats.aggro_range[id] = world.entity_repository[entity_type].aggro_range;

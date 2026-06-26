@@ -120,6 +120,7 @@ struct AssetRepository{
 struct Entity{
     float jumping_force;
     float running_force;
+    float wall_jumping_force;
     float air_movement_force;
     float HP;
     float anim_speed;

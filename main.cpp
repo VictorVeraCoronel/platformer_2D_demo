@@ -40,7 +40,7 @@ int main(){
     //Graphic initialization
     InitWindow(1920, 1080, "platformer_2D");
     ToggleBorderlessWindowed();
-    SetTargetFPS(60.0f);
+    SetTargetFPS(144.0f);
     Camera2D camera;
     VirtualScreen virtual_screen = LoadVirtualScreen();
 
@@ -48,7 +48,7 @@ int main(){
     std::unique_ptr<World> world = std::make_unique<World>();
     LoadGameData(*world);
     InitCameraManager(*world, camera);
-    const float dt = 1.0f / 60.0f; //
+    const float dt = 1.0f / 144.0f; //
     float acumulador = 0.0f;
 
 

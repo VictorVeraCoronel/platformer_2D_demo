@@ -4,6 +4,7 @@
     "entity_type" : "lurker",
     "running_force": 100,
     "jumping_force": 500,
+    "wall_jumping_force" : 700.0,
     "air_movement_force": 40,
     "hp" : 1.0,
     "sprite_id" : 0,

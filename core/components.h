@@ -32,6 +32,7 @@ struct StatsComponent{
     bool active[MAX_ENTITIES] = {};
     float hp[MAX_ENTITIES] = {};
     float jumping_force[MAX_ENTITIES] = {};
+    float wall_jumping_force[MAX_ENTITIES] = {};
     float running_force[MAX_ENTITIES] = {};
     float air_movement_force[MAX_ENTITIES] = {};
     float aggro_range[MAX_ENTITIES] = {};

@@ -25,12 +25,14 @@ void UpdateGameplay(World& world){
         bool& jump_released = inputs.jump_released[i];
         float& forces_x = physics.forces[i].x;
         float& forces_y = physics.forces[i].y;
+        float& velocity_x = physics.velocities[i].x;
         float& velocity_y = physics.velocities[i].y;
         float& coyote_timer = physics.coyote_timer[i];
         WallCollision& wall_collision = physics.wall_collision[i];
         bool& is_grounded = physics.is_grounded[i];
         float& running_force = stats.running_force[i];
         float& jumping_force = stats.jumping_force[i];
+        float& wall_jumping_force = stats.wall_jumping_force[i];
         float& air_movement_force = stats.air_movement_force[i];
 
         //Horizontal movement
@@ -63,7 +65,7 @@ void UpdateGameplay(World& world){
 
         //Jump force application
         if(jump_pressed && coyote_timer > 0.01f && wall_collision == WallCollision::NONE){
-            forces_y -= jumping_force;
+            velocity_y = -jumping_force;
             is_grounded = false;
             coyote_timer = 0.0f;
         }
@@ -71,26 +73,26 @@ void UpdateGameplay(World& world){
         //Wall jump force application from left wall
         if(jump_pressed && wall_collision == WallCollision::LEFT && velocity_y > 0){
             forces_y -= jumping_force;
-            forces_x += running_force*3;
+            velocity_x += wall_jumping_force;
             is_grounded = false;
             coyote_timer = 0.0f;
-            inputs.horizontal_lock_timer[i] = 0.2f;
+            inputs.horizontal_lock_timer[i] = 0.4f;
             wall_collision = WallCollision::NONE;
         }
 
         //Wall jump force application from right wall
         if(jump_pressed && wall_collision == WallCollision::RIGHT && velocity_y > 0){
             forces_y -= jumping_force;
-            forces_x -= running_force*3;
+            velocity_x -= wall_jumping_force;
             is_grounded = false;
             coyote_timer = 0.0f;
-            inputs.horizontal_lock_timer[i] = 0.2f;
+            inputs.horizontal_lock_timer[i] = 0.4f;
             wall_collision = WallCollision::NONE;
         }
 
         //Variable jump / Halve jumping speed
         if(jump_released && velocity_y < 0){
-            velocity_y *= 0.5f;
+            velocity_y *= 0.6f;
         }
 
         ClearInput(inputs,i);

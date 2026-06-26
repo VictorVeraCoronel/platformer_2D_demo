@@ -22,7 +22,7 @@ struct World{
     AssetRepository asset_repository = {};
     std::unordered_map<std::string, Entity> entity_repository = {};
     float gravity = 1600.0f;
-    float fall_gravity_multiplier = 2.25f;
+    float fall_gravity_multiplier = 2.5f;
 
     //----------------------------------------------
     // Init of every world attribute:

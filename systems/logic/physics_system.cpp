@@ -1,4 +1,5 @@
 #include "../../core/world.h"
+#include <cmath>
 #include <iostream>
 
 
@@ -30,11 +31,11 @@ void IntegrateForces(World& world, float dt, uint16_t i){
     }
 
     // APPLY GRAVITY FORCE
-    forces_y += (entity_mass * current_gravity);
+    forces_y += (entity_mass * current_gravity) * dt;
 
     // WE SUM THE FORCES OBTAINED FROM GAMEPLAY SYSTEM
     vel_x += (forces_x / entity_mass) * dt;
-    vel_y += (forces_y / entity_mass) * dt;
+    vel_y += (forces_y / entity_mass);
 
     // CLEAR ALL FORCES
     forces_x = 0;
@@ -140,7 +141,7 @@ void ResolveYCollisions(World& world, float dt, uint16_t i){
     //CHECK COLLISION WHEN JUMPING
     else if (vel_y < 0) {
         int index_left  = level.GetTileIndexAtPosition(pos_x , next_pos_y);
-        int index_right =  level.GetTileIndexAtPosition((pos_x + size_x - 1), (next_pos_y / TILE_SIZE));
+        int index_right =  level.GetTileIndexAtPosition((pos_x + size_x - 1), (next_pos_y));
 
         if (level.map[index_left] > 0 || level.map[index_right] > 0) collision_y = true;
     }
@@ -153,27 +154,25 @@ void ResolveYCollisions(World& world, float dt, uint16_t i){
     else {
         // Just move
         pos_y = next_pos_y;
-        if (vel_y > 0.1f){
-            is_grounded = false;
-        }
+        is_grounded = false;
         coyote_timer -= dt;
     }
 
 }
 
-void ApplyFrictions(World& world, uint16_t i){
+void ApplyFrictions(World& world, float dt, uint16_t i){
     auto& physics = world.physics;
     float& vel_x = physics.velocities[i].x;
     float& vel_y = physics.velocities[i].y;
     bool& is_grounded = physics.is_grounded[i];
 
     if(is_grounded){
-        vel_x *=  GROUND_FRICTION;
+        vel_x *= std::pow(GROUND_FRICTION, dt * 60.0f);
     }else if(physics.wall_collision[i] != WallCollision::NONE){
-        vel_y *= WALL_FRICTION;
+        vel_y *= std::pow(WALL_FRICTION, dt * 60.0f);
     }
     else{
-        vel_x *=  AIR_FRICTION;
+        vel_x *=  std::pow(AIR_FRICTION, dt * 60.0f);
     }
 }
 
@@ -188,7 +187,7 @@ void UpdatePhysics(World& world, float dt){
         IntegrateForces(world, dt, i);
         ResolveXCollisions(world, dt, i);
         ResolveYCollisions(world, dt, i);
-        ApplyFrictions(world, i);
+        ApplyFrictions(world, dt, i);
 
     }
 }
