@@ -39,8 +39,8 @@ VirtualScreen LoadVirtualScreen(){
 
 int main(){
     //Graphic initialization
-    InitWindow(1920, 1080, "platformer_2D");
-    ToggleBorderlessWindowed();
+    InitWindow(800, 600, "platformer_2D");
+    //ToggleBorderlessWindowed();
     SetTargetFPS(144.0f);
     Camera2D camera;
     VirtualScreen virtual_screen = LoadVirtualScreen();
@@ -68,8 +68,9 @@ int main(){
         // LOGIC LOOP (60 HZ)
         while (acumulador >= dt) {
             UpdateAnimationSystem(*world, dt);
-            UpdatePhysics(*world, dt);
             UpdateGameplay(*world);
+            UpdatePhysics(*world, dt);
+            FollowCamera(*world, camera, dt);
 
 
             acumulador -= dt;
@@ -94,7 +95,6 @@ int main(){
 
                 }
 
-                FollowCamera(*world, camera, dt);
                 RenderCore(*world, camera);
 
             EndMode2D();

@@ -17,8 +17,8 @@ void UpdateGameplay(World& world){
         //Clear wall collisions
         physics.wall_collision[i] = WallCollision::NONE;
 
-    }
 
+    }
 
 }
 
@@ -109,21 +109,12 @@ void UpdateAnimationState(World& world, int i){
     auto& physics = world.physics;
     auto& animations = world.animations;
 
-    //MID AIR ANIMATIONS
-    if (!physics.is_grounded[i] && physics.wall_collision[i] == WallCollision::NONE) {
-        if (physics.velocities[i].y < 0.0f) {
-            animations.state[i] = AnimState::JUMPING;
-        } else {
-            animations.state[i] = AnimState::FALLING;
-        }
-    }
+    animations.state[i] = AnimState::IDLE;
 
     //GROUND ANIMATIONS
-    else if(physics.is_grounded[i]){
-        if (physics.velocities[i].x > 0.1f || physics.velocities[i].x < 0.1f) {
+    if(physics.is_grounded[i]){
+        if (std::abs(physics.velocities[i].x) > 40.0f) {
             animations.state[i] = AnimState::RUNNING;
-        }else if (physics.velocities[i].x == 0.0f){
-            animations.state[i] = AnimState::IDLE;
         }
     }
 
@@ -131,6 +122,19 @@ void UpdateAnimationState(World& world, int i){
     else if(physics.wall_collision[i] != WallCollision::NONE){
         animations.state[i] = AnimState::WALL_SLIDING;
     }
+
+    //MID AIR ANIMATIONS
+    else if (!physics.is_grounded[i]) {
+        if (physics.velocities[i].y < 0.0f) {
+            animations.state[i] = AnimState::JUMPING;
+        } else {
+            animations.state[i] = AnimState::FALLING;
+        }
+    }
+
+
+
+
 
 
 }

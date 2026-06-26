@@ -21,10 +21,32 @@ void RenderEntities(World& world){
         auto& anim = world.animations;
         auto& sprites = world.asset_repository.sprite;
 
+        float width_sign = 1.0f; // 1.0f = Derecha, -1.0f = Izquierda
+
+        if (physics.velocities[i].x > 10.0f) {
+            width_sign = 1.0f;
+        }
+        else if (physics.velocities[i].x < -10.0f) {
+            width_sign = -1.0f;
+        }
+        // SI EL PERSONAJE NO SE MUEVE HORIZONTALMENTE... PERO ESTÁ EN LA PARED:
+        else if (physics.wall_collision[i] != WallCollision::NONE) {
+
+            // Si la pared está a la DERECHA, el stickman debe mirar hacia la DERECHA (hacia el muro)
+            if (physics.wall_collision[i] == WallCollision::RIGHT) {
+                width_sign = 1.0f;
+                std::cout<<"Pared a la derecha"<<std::endl;
+            }
+            // Si la pared está a la IZQUIERDA, el stickman debe mirar hacia la IZQUIERDA
+            else if (physics.wall_collision[i] == WallCollision::LEFT) {
+                width_sign = -1.0f;
+                std::cout<<"Pared a la izquierda"<<std::endl;
+            }
+        }
+
 
         float source_x = anim.current_frame[i] * renders.asset_width[i];
         float source_y = (float)anim.state[i] * renders.asset_height[i];
-        float width_sign = (physics.velocities[i].x < -1.0f) ? -1.0f : 1.0f;
         Rectangle source_rec = { source_x, source_y, (float)renders.asset_width[i] * width_sign, (float)renders.asset_height[i] };
 
         Texture2D texture = sprites[renders.asset_id[i]];
