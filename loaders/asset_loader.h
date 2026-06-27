@@ -7,8 +7,10 @@ void LoadTextureCategory(Texture2D* target_array, const std::string& json_path, 
 
 void LoadUIAssets(World& world);
 
-void LoadSpriteAssets(World &world);
+void LoadSpriteAssets(World& world);
 
-void LoadTileAssets(World &world);
+void LoadTileAssets(World& world);
 
-void LoadWallpaperAssets(World &world);
+void LoadWallpaperAssets(World& world);
+
+void LoadAllAssets(World& world);

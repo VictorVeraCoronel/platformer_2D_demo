@@ -1,8 +1,13 @@
 #pragma once
 #include "../../core/world.h"
 
-void RenderCore(World& world, Camera2D& camera);
+struct RenderScreenContext {
+    RenderTexture2D virtual_target;
+    float virtual_width;
+    float virtual_height;
+};
 
-void RenderEntities(World& world);
+void RenderCore(const World& world, Camera2D& camera, const VirtualScreen& virtual_screen);
 
-void RenderMap(World& world, Camera2D& camera);
+VirtualScreen LoadVirtualScreen(int v_screen_width, int v_screen_height, int texture_width, int texture_height);
+

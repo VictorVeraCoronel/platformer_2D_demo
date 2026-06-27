@@ -47,3 +47,10 @@ void LoadWallpaperAssets(World& world) {
     LoadTextureCategory(world.asset_repository.wallpaper, "./game_data/textures/wallpapers.json", "wallpaper_assets");
     std::cout<<"Assets de wallpapers cargadas con exito"<<std::endl;
 }
+
+void LoadAllAssets(World& world){
+    LoadUIAssets(world);
+    LoadSpriteAssets(world);
+    LoadTileAssets(world);
+    LoadWallpaperAssets(world);
+}

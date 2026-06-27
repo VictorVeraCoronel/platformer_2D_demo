@@ -1,100 +1,78 @@
 #include "../../core/world.h"
 #include "render_core.h"
+#include "render_entities.h"
+#include "render_map.h"
 #include <raylib.h>
-#include <iostream>
 
-void RenderCore(World& world, Camera2D& camera){
+void RenderCore(const World& world, Camera2D& camera, const VirtualScreen& virtual_screen){
+
+    // RENDER THE WORLD IN THE VIRTUAL TEXTURE                                               |
+    BeginTextureMode(virtual_screen.target_render_texture);
+        ClearBackground(RAYWHITE);
+
+
+        BeginMode2D(camera);
+
+            RenderBackground(world, camera);
+            RenderEntities(world);
+            RenderMap(world, camera, virtual_screen);
+
+        EndMode2D();
+
+    EndTextureMode();
 
 
 
-    RenderEntities(world);
-    RenderMap(world, camera);
+    // DRAW VIRTUAL TEXTURE IN THE MONITOR                                                   |
+    BeginDrawing();
+        ClearBackground(BLACK);
 
+        // CALCULATE DYNAMIC SCALE DEPENDING ON USER SCREEN RESOLUTION
+        float scale = fminf((float)GetScreenWidth() / virtual_screen.width,
+                            (float)GetScreenHeight() / virtual_screen.height);
+
+        DrawTexturePro(
+            virtual_screen.target_render_texture.texture,
+            // ORIGIN: RAYLIB'S Y AXIS TEXTURE IS INVERTED BY OPENGL CONVENTION, THATS WHY WE USE (-)
+            Rectangle{ 0.0f, 0.0f, (float)virtual_screen.target_render_texture.texture.width, (float)-virtual_screen.target_render_texture.texture.height },
+                    // Destino: Centrado en la pantalla real actual del cliente
+                    Rectangle{
+                        ((float)GetScreenWidth() - ((float)virtual_screen.width * scale)) * 0.5f,
+                        ((float)GetScreenHeight() - ((float)virtual_screen.height * scale)) * 0.5f,
+                        (float)virtual_screen.width * scale,
+                        (float)virtual_screen.height * scale
+                    },
+                    Vector2{ 0, 0 },
+                    0.0f,
+                    WHITE
+        );
+
+
+
+
+        // ---------------------------------------------------------------------------------------
+        // DEBUG CONSOLE PRINTS                                                                  |
+        // ---------------------------------------------------------------------------------------
+        const std::string pos_x = "Position_x: " + std::to_string(world.physics.positions[0].x);
+        const std::string pos_y = "Position_y: " + std::to_string(world.physics.positions[0].y);
+        DrawText(pos_x.c_str() ,2, 990, 32, BLACK);
+        DrawText(pos_y.c_str() ,2, 1042, 32, BLACK);
+        // ---------------------------------------------------------------------------------------
+        // DEBUG CONSOLE PRINTS                                                                  |
+        // ---------------------------------------------------------------------------------------
+
+
+
+    EndDrawing();
 
 }
 
-void RenderEntities(World& world){
-    auto& renders = world.renders;
+VirtualScreen LoadVirtualScreen(int v_screen_width, int v_screen_height, int texture_width, int texture_height){
+    VirtualScreen virtual_screen;
 
-    for(int i = 0; i < MAX_ENTITIES; i++){
-        if(!renders.active[i]) continue;
+    virtual_screen.width = v_screen_width;
+    virtual_screen.height = v_screen_height;
+    virtual_screen.target_render_texture = LoadRenderTexture(texture_width, texture_height);
 
-        auto& physics = world.physics;
-        auto& anim = world.animations;
-        auto& sprites = world.asset_repository.sprite;
-
-        float width_sign = 1.0f; // 1.0f = Derecha, -1.0f = Izquierda
-
-        if (physics.velocities[i].x > 10.0f) {
-            width_sign = 1.0f;
-        }
-        else if (physics.velocities[i].x < -10.0f) {
-            width_sign = -1.0f;
-        }
-        // SI EL PERSONAJE NO SE MUEVE HORIZONTALMENTE... PERO ESTÁ EN LA PARED:
-        else if (physics.wall_collision[i] != WallCollision::NONE) {
-
-            // Si la pared está a la DERECHA, el stickman debe mirar hacia la DERECHA (hacia el muro)
-            if (physics.wall_collision[i] == WallCollision::RIGHT) {
-                width_sign = 1.0f;
-            }
-            // Si la pared está a la IZQUIERDA, el stickman debe mirar hacia la IZQUIERDA
-            else if (physics.wall_collision[i] == WallCollision::LEFT) {
-                width_sign = -1.0f;
-            }
-        }
-
-
-        float source_x = anim.current_frame[i] * renders.asset_width[i];
-        float source_y = (float)anim.state[i] * renders.asset_height[i];
-        Rectangle source_rec = { source_x, source_y, (float)renders.asset_width[i] * width_sign, (float)renders.asset_height[i] };
-
-        Texture2D texture = sprites[renders.asset_id[i]];
-        Rectangle dest_rec = { physics.positions[i].x, physics.positions[i].y, (float)renders.asset_width[i], (float)renders.asset_height[i] };
-        Vector2 origin = { 0.0f, 0.0f };
-
-        DrawTexturePro(texture, source_rec, dest_rec, origin, 0.0f, WHITE);
-
-    }
-
-}
-
-
-void RenderMap(World& world, Camera2D& camera){
-
-    auto& level = world.current_level;
-
-    //Determine initial tile_x and initial tile_y of the camera.
-    int initial_x = (std::max(0, (static_cast<int>(camera.target.x - 1500)))) / (int)TILE_SIZE;
-    int initial_y = (std::max(0, (static_cast<int>(camera.target.y - 1000)))) / (int)TILE_SIZE;
-
-    //Determine how many tiles can fit into the screen
-    int tiles_x = ((GetScreenWidth()) / TILE_SIZE) + 64; // This variable represents the number of tiles that you see in axis X
-    int tiles_y = ((GetScreenHeight()) / TILE_SIZE) + 64; // This variable represents the number of tiles that you see in axis Y
-
-
-    for (int y = initial_y; y < initial_y + tiles_y; y++) {
-        for (int x = initial_x; x < initial_x  + tiles_x; x++) {
-
-            Texture2D texture = world.asset_repository.tile[0];
-            int position_x = TILE_SIZE * x;
-            int position_y = TILE_SIZE * y;
-            int index = (y * level.width) + (x);
-
-            // If the camera is out of bounds, do not draw anything
-            if(position_x >= level.width * TILE_SIZE || position_y >= level.height * TILE_SIZE){
-                continue;
-            }
-            if(position_x < 0 || position_y < 0){
-                continue;
-            }
-
-            if(level.map[index] != 0){
-                DrawTexture(texture, position_x, position_y, WHITE);
-            }
-
-        }
-    }
-
-
+    return virtual_screen;
 }

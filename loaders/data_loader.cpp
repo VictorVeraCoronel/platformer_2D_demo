@@ -146,7 +146,7 @@ void LoadBossesData (World& world, std::string world_name){
 
 }
 
-void LoadLevelData(World &world, std::string world_name, std::string level_name){
+void InstantiateLevel(World &world, std::string world_name, std::string level_name){
 
     // Useful data references
     auto& current_level = world.current_level;
@@ -202,4 +202,10 @@ void LoadLevelData(World &world, std::string world_name, std::string level_name)
     }
 
 
+}
+
+void LoadAllData(World &world, std::string world_name, std::string level_name){
+    LoadPlayerData(world);
+    LoadEnemiesData(world, world_name);
+    LoadBossesData(world, world_name);
 }

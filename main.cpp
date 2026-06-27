@@ -1,4 +1,3 @@
-#include <cmath>
 #include <memory>
 #include "./core/world.h"
 #include "./systems/logic/physics_system.h"
@@ -13,132 +12,63 @@
 #include "loaders/asset_loader.h"
 #include "systems/logic/ai_system.h"
 
-#include <iostream>
 #include <raylib.h>
 
 void LoadGameData(World& world){
-
-    LoadPlayerData(world);
-    LoadEnemiesData(world, "world_1");
-    LoadBossesData(world, "world_1");
-
-
-    LoadUIAssets(world);
-    LoadSpriteAssets(world);
-    LoadTileAssets(world);
-    LoadWallpaperAssets(world);
-
-    LoadLevelData(world, "world_1", "level_1");
-}
-VirtualScreen LoadVirtualScreen(){
-    VirtualScreen virtual_screen;
-    virtual_screen.width = 1920;
-    virtual_screen.height = 1080;
-    virtual_screen.target_render_texture = LoadRenderTexture(1920, 1080);
-
-    return virtual_screen;
+    LoadAllData(world, "world_1", "level_1");
+    LoadAllAssets(world);
+    InstantiateLevel(world, "world_1", "level_1");
 }
 
-int main(){
-    //Graphic initialization
+void InitRaylibWindow(){
     InitWindow(1920, 1080, "platformer_2D");
     ToggleBorderlessWindowed();
     SetTargetFPS(144.0f);
-    Camera2D camera = {0, 0, 0, 0, 0, 0};
-    VirtualScreen virtual_screen = LoadVirtualScreen();
+}
 
-    //Initialization
+int main(){
+
+    // GRAPHIC INITIALIZATION
+    InitRaylibWindow();
+    Camera2D camera = {0, 0, 0, 0, 0, 0};
+    VirtualScreen virtual_screen = LoadVirtualScreen(1920, 1080, 1920, 1080);
+
+    // LOGIC INITIALIZATION
     std::unique_ptr<World> world = std::make_unique<World>();
     LoadGameData(*world);
     InitCameraManager(*world, camera);
-    const float dt = 1.0f / 144.0f; //
+    const float dt = 1.0f / 144.0f;
     float acumulador = 0.0f;
 
 
-
-
+    // GAME LOOP
     while (!WindowShouldClose()) {
 
+        // FIXED DELTA TIME SYNC
         float frame_time = GetFrameTime();
-        if (frame_time > 0.25f) frame_time = 0.25f;
+        if (frame_time > 0.25f) frame_time = 0.25f; //CLAMPING TO AVOID DEATH SPIRAL
         acumulador += frame_time;
 
 
-        UpdateInput(*world, dt);
-
-        // LOGIC LOOP (60 HZ)
+        // FIXED LOGIC LOOP (144 HZ)
         while (acumulador >= dt) {
-
+            UpdateInput(*world, dt);
             UpdateAnimationSystem(*world, dt);
             UpdateAISystem(*world);
             UpdateGameplay(*world);
             UpdatePhysics(*world, dt);
             FollowCamera(*world, camera, dt);
 
-
             acumulador -= dt;
         }
 
-        // RENDER LOOP (144 HZ)
-        BeginTextureMode(virtual_screen.target_render_texture);
-            ClearBackground(RAYWHITE);
 
+        // FRAME RENDER
+        RenderCore(*world, camera, virtual_screen);
 
-            BeginMode2D(camera);
-
-                float fondo_x = camera.target.x * 0.2f;
-                float fondo_y = camera.target.y * 0.2f;
-
-                for (int i = -1; i < 5; i++) {
-
-                    for(int j = -1; j < 5; j++){
-                        float ancho_fondo = 3840.0f;
-                        float alto_fondo = 2160.0f;
-                        DrawTexture(world->asset_repository.wallpaper[0], fondo_x + (i * ancho_fondo), fondo_y + (j * alto_fondo), WHITE);
-                    }
-
-                }
-
-                RenderCore(*world, camera);
-
-
-            EndMode2D();
-
-        EndTextureMode();
-
-
-        //Now we apply the scale to the virtual texture and draw it after scaling it correctly
-        BeginDrawing();
-            ClearBackground(BLACK);
-
-            // Calculate the scale
-            float scale = fminf((float)GetScreenWidth() / virtual_screen.width,
-                                (float)GetScreenHeight() / virtual_screen.height);
-
-            // We draw the virtual texture
-            DrawTexturePro(
-                virtual_screen.target_render_texture.texture,
-                // Origen: La textura de Raylib está invertida en el eje Y por convención de OpenGL, usamos el menos (-)
-                Rectangle{ 0.0f, 0.0f, (float)virtual_screen.target_render_texture.texture.width, (float)-virtual_screen.target_render_texture.texture.height },
-                        // Destino: Centrado en la pantalla real actual del cliente
-                        Rectangle{
-                            ((float)GetScreenWidth() - ((float)virtual_screen.width * scale)) * 0.5f,
-                        ((float)GetScreenHeight() - ((float)virtual_screen.height * scale)) * 0.5f,
-                        (float)virtual_screen.width * scale,
-                        (float)virtual_screen.height * scale
-                        },
-                        Vector2{ 0, 0 },
-                        0.0f,
-                        WHITE
-            );
-            const std::string pos_x = "Position_x: " + std::to_string(world->physics.positions[0].x);
-            const std::string pos_y = "Position_y: " + std::to_string(world->physics.positions[0].y);
-            DrawText(pos_x.c_str() ,2, 990, 32, BLACK);
-            DrawText(pos_y.c_str() ,2, 1042, 32, BLACK);
-
-
-        EndDrawing();
     }
+
+
 
 
     CloseWindow();
