@@ -4,7 +4,8 @@
 #include "constants.h"
 #include "raylib.h"
 #include <string>
-
+#include <iostream>
+#include "../dependencies/json.hpp"
 
 //----------------------------------------------
 // WORLD CUSTOM TYPES:
@@ -23,8 +24,16 @@ enum class WallCollision : int8_t{
 
 enum class AIArchetype : uint8_t {
     MELEE_CHASER = 0,
-    RANGED_KITER = 1
+    RANGED_KITER = 1,
+    PATROLLER = 2
 };
+
+NLOHMANN_JSON_SERIALIZE_ENUM(AIArchetype, {
+    { AIArchetype::MELEE_CHASER, "MELEE_CHASER" },
+    { AIArchetype::RANGED_KITER, "RANGED_KITER" },
+    { AIArchetype::PATROLLER, "PATROLLER" }
+
+})
 
 enum class AIState : uint8_t {
     IDLE = 0,
@@ -32,6 +41,12 @@ enum class AIState : uint8_t {
     FOLLOW = 2
 
 };
+
+NLOHMANN_JSON_SERIALIZE_ENUM(AIState, {
+    { AIState::IDLE,   "IDLE" },
+    { AIState::PATROL, "PATROL" },
+    { AIState::FOLLOW, "FOLLOW" }
+})
 
 enum class AnimState : uint8_t {
     IDLE = 0,
@@ -97,7 +112,7 @@ struct Level{
         return ((cell_y * width) + cell_x);
     }
 
-    inline uint8_t GetTileValueAtPosition(float pixel_x, float pixel_y) {
+    inline uint8_t GetTileValueAtPosition(float pixel_x, float pixel_y) const {
         // Negative pixels are out of bounds
         if (pixel_x < 0.0f || pixel_y < 0.0f) return 0;
 

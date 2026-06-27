@@ -20,9 +20,7 @@ void LoadGameData(World& world){
 
     LoadPlayerData(world);
     LoadEnemiesData(world, "world_1");
-    std::cout<<"Probnado"<<std::endl;
     LoadBossesData(world, "world_1");
-
 
 
     LoadUIAssets(world);
@@ -46,7 +44,7 @@ int main(){
     InitWindow(1920, 1080, "platformer_2D");
     ToggleBorderlessWindowed();
     SetTargetFPS(144.0f);
-    Camera2D camera = {0 ,0, 0, 0.0f};
+    Camera2D camera = {0, 0, 0, 0, 0, 0};
     VirtualScreen virtual_screen = LoadVirtualScreen();
 
     //Initialization
@@ -72,7 +70,7 @@ int main(){
         while (acumulador >= dt) {
 
             UpdateAnimationSystem(*world, dt);
-            UpdateAISystem(*world, dt);
+            UpdateAISystem(*world);
             UpdateGameplay(*world);
             UpdatePhysics(*world, dt);
             FollowCamera(*world, camera, dt);

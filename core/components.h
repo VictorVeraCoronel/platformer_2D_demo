@@ -45,6 +45,7 @@ struct LocomotionComponent{
 
 struct AIComponent{
     bool active[MAX_ENTITIES] = {};
+    AIArchetype ai_arquetypes[MAX_ENTITIES] = {};
     AIState ai_states[MAX_ENTITIES] = {};
     float aggro_range[MAX_ENTITIES] = {};
     float follow_speed[MAX_ENTITIES] = {};
