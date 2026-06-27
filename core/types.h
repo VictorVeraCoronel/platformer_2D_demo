@@ -139,7 +139,6 @@ struct Entity{
 
     //ai
     float aggro_range;
-    float lose_aggro_range;
     float patrol_speed;
     float follow_speed;
 

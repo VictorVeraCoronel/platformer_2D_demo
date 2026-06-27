@@ -4,8 +4,9 @@
 void UpdateGameplay(World& world){
     auto& physics = world.physics;
     auto& inputs = world.inputs;
+    auto& ais = world.ais;
 
-
+    // PLAYERS GAMEPLAY LOOP
     for(int i = 0; i < MAX_PLAYERS; i++){
         if(!inputs.active[i]) continue;
 
@@ -16,10 +17,86 @@ void UpdateGameplay(World& world){
         //Clear wall collisions
         physics.wall_collision[i] = WallCollision::NONE;
 
+    }
+
+    // ENTITIES GAMEPLAY LOOP
+    for(int i = MAX_PLAYERS; i < MAX_ENTITIES; i++){
+        if(!ais.active[i]) continue;
+
+        UpdateEntityBehaviour(world, i, 0);
+        UpdateEntityAnimations(world, i);
 
     }
 
 }
+
+
+// ENTITIES GAMEPLAY FUNCTIONS
+void UpdateEntityBehaviour(World& world, int i, int player_index){
+
+    // Useful data references
+    // const auto& e_position = world.physics.positions[i];
+    // const auto& p_position = world.physics.positions[player_index];
+    // const auto& aggro_range = world.ais.aggro_range[i];
+    auto& ai_state = world.ais.ai_states[i];
+    //
+    // // DISTANCE BETWEEN ENTITY AND PLAYER;
+    // Vector2 e_p_vector = {(e_position.x - p_position.x) , (e_position.y - p_position.y)};
+
+    // CALCULATION OF SQUARE OF DISTANCE AND AGGRO RANGE TO AVOID USING SQUARE ROOT, AS IT PRODUCES LATENCY.
+    // float distance_squared = (e_p_vector.x * e_p_vector.x) + (e_p_vector.y * e_p_vector.y);
+    // float aggro_range_squared = aggro_range * aggro_range;
+
+
+    // IF THE ENEMY GETS NEAR ENOUGH, IT WILL FOLLOW THE PLAYER
+    // if (distance_squared <= aggro_range_squared){
+    //     ai_state = AIState::FOLLOW;
+    // }
+
+    // IF THE PLAYER IS FAR AWAY, THE ENEMY PATROLS
+    // else{
+    //     ai_state = AIState::PATROL;
+    // }
+
+    ai_state = AIState::PATROL;
+
+
+
+
+
+
+}
+
+void UpdateEntityAnimations(World& world, int i){
+    auto& physics = world.physics;
+    auto& animations = world.animations;
+
+    animations.state[i] = AnimState::IDLE;
+
+    //GROUND ANIMATIONS
+    if(physics.is_grounded[i]){
+        if (std::abs(physics.velocities[i].x) > 40.0f) {
+            animations.state[i] = AnimState::RUNNING;
+        }
+    }
+
+    //WALL ANIMATIONS
+    else if(physics.wall_collision[i] != WallCollision::NONE){
+        animations.state[i] = AnimState::WALL_SLIDING;
+    }
+
+    //MID AIR ANIMATIONS
+    else if (!physics.is_grounded[i]) {
+        if (physics.velocities[i].y < 0.0f) {
+            animations.state[i] = AnimState::JUMPING;
+        } else {
+            animations.state[i] = AnimState::FALLING;
+        }
+    }
+}
+
+
+// PLAYERS GAMEPLAY FUNCTIONS
 
 void OrderPhysicsFromInput(World& world, int i){
     auto& inputs = world.inputs;

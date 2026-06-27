@@ -5,8 +5,10 @@
 
 void RenderCore(World& world, Camera2D& camera){
 
-     RenderEntities(world);
-     RenderMap(world, camera);
+
+
+    RenderEntities(world);
+    RenderMap(world, camera);
 
 
 }

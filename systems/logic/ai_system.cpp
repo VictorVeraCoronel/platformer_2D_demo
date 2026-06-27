@@ -1,8 +1,9 @@
 #include "ai_system.h"
 #include <cmath>
 #include <raylib.h>
+#include "world_utils.h"
 
-void UpdateAISystem(World& world, Vector2 player_pos, float dt){
+void UpdateAISystem(World& world, float dt){
 
     auto& ais = world.ais;
 
@@ -10,11 +11,22 @@ void UpdateAISystem(World& world, Vector2 player_pos, float dt){
         if (!ais.active[i]) continue; //Performance check
 
         //Useful data references
-        auto& ai_positions = world.physics.positions[i];
+        auto& ai_position = world.physics.positions[i];
         auto& ai_velocities = world.physics.velocities[i];
         auto& ai_forces = world.physics.forces[i];
         auto& follow_speed = world.ais.follow_speed[i];
         auto& patrol_speed = world.ais.patrol_speed[i];
+
+
+        // LOOK FOR NEAREST PLAYER TO ENTITY
+        int16_t nearest_player = GetClosestPlayerIndex(world, ai_position);
+
+        // IF THERE ARE NO PLAYERS, AI WILL NOT UPDATE
+        if (nearest_player == -1) continue;
+
+        Vector2 closest_player_position = world.physics.positions[nearest_player];
+
+
 
         switch (ais.ai_states[i]) {
 
@@ -34,7 +46,7 @@ void UpdateAISystem(World& world, Vector2 player_pos, float dt){
 
             case AIState::FOLLOW:{
 
-                Vector2 to_player = {player_pos.x - ai_positions.x, player_pos.y - ai_positions.y};
+                Vector2 to_player = {closest_player_position.x - ai_position.x, closest_player_position.y - ai_position.y};
                 float distance = std::sqrt((to_player.x * to_player.x) + (to_player.y * to_player.y));
 
                 if(distance > 0.1f){

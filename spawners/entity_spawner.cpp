@@ -17,7 +17,6 @@ void SpawnEntity(World& world, std::string entity_type, Vector2 position, uint16
     if(entity_type != "player"){
         world.ais.active[id] = true;
         world.ais.aggro_range[id] = world.entity_repository[entity_type].aggro_range;
-        world.ais.lose_aggro_range[id] = world.entity_repository[entity_type].lose_aggro_range;
         world.ais.follow_speed[id] = world.entity_repository[entity_type].follow_speed;
         world.ais.patrol_speed[id] = world.entity_repository[entity_type].patrol_speed;
     }

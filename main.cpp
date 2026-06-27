@@ -11,6 +11,7 @@
 #include "core/types.h"
 #include "loaders/data_loader.h"
 #include "loaders/asset_loader.h"
+#include "systems/logic/ai_system.h"
 
 #include <iostream>
 #include <raylib.h>
@@ -45,7 +46,7 @@ int main(){
     InitWindow(1920, 1080, "platformer_2D");
     ToggleBorderlessWindowed();
     SetTargetFPS(144.0f);
-    Camera2D camera;
+    Camera2D camera = {0 ,0, 0, 0.0f};
     VirtualScreen virtual_screen = LoadVirtualScreen();
 
     //Initialization
@@ -69,7 +70,9 @@ int main(){
 
         // LOGIC LOOP (60 HZ)
         while (acumulador >= dt) {
+
             UpdateAnimationSystem(*world, dt);
+            UpdateAISystem(*world, dt);
             UpdateGameplay(*world);
             UpdatePhysics(*world, dt);
             FollowCamera(*world, camera, dt);
@@ -81,6 +84,7 @@ int main(){
         // RENDER LOOP (144 HZ)
         BeginTextureMode(virtual_screen.target_render_texture);
             ClearBackground(RAYWHITE);
+
 
             BeginMode2D(camera);
 
@@ -99,6 +103,7 @@ int main(){
 
                 RenderCore(*world, camera);
 
+
             EndMode2D();
 
         EndTextureMode();
@@ -106,28 +111,34 @@ int main(){
 
         //Now we apply the scale to the virtual texture and draw it after scaling it correctly
         BeginDrawing();
-        ClearBackground(BLACK);
+            ClearBackground(BLACK);
 
-        // Calculate the scale
-        float scale = fminf((float)GetScreenWidth() / virtual_screen.width,
-                            (float)GetScreenHeight() / virtual_screen.height);
+            // Calculate the scale
+            float scale = fminf((float)GetScreenWidth() / virtual_screen.width,
+                                (float)GetScreenHeight() / virtual_screen.height);
 
-        // We draw the virtual texture
-        DrawTexturePro(
-            virtual_screen.target_render_texture.texture,
-            // Origen: La textura de Raylib está invertida en el eje Y por convención de OpenGL, usamos el menos (-)
-            Rectangle{ 0.0f, 0.0f, (float)virtual_screen.target_render_texture.texture.width, (float)-virtual_screen.target_render_texture.texture.height },
-                       // Destino: Centrado en la pantalla real actual del cliente
-                       Rectangle{
-                           ((float)GetScreenWidth() - ((float)virtual_screen.width * scale)) * 0.5f,
-                       ((float)GetScreenHeight() - ((float)virtual_screen.height * scale)) * 0.5f,
-                       (float)virtual_screen.width * scale,
-                       (float)virtual_screen.height * scale
-                       },
-                       Vector2{ 0, 0 },
-                       0.0f,
-                       WHITE
-        );
+            // We draw the virtual texture
+            DrawTexturePro(
+                virtual_screen.target_render_texture.texture,
+                // Origen: La textura de Raylib está invertida en el eje Y por convención de OpenGL, usamos el menos (-)
+                Rectangle{ 0.0f, 0.0f, (float)virtual_screen.target_render_texture.texture.width, (float)-virtual_screen.target_render_texture.texture.height },
+                        // Destino: Centrado en la pantalla real actual del cliente
+                        Rectangle{
+                            ((float)GetScreenWidth() - ((float)virtual_screen.width * scale)) * 0.5f,
+                        ((float)GetScreenHeight() - ((float)virtual_screen.height * scale)) * 0.5f,
+                        (float)virtual_screen.width * scale,
+                        (float)virtual_screen.height * scale
+                        },
+                        Vector2{ 0, 0 },
+                        0.0f,
+                        WHITE
+            );
+            const std::string pos_x = "Position_x: " + std::to_string(world->physics.positions[0].x);
+            const std::string pos_y = "Position_y: " + std::to_string(world->physics.positions[0].y);
+            DrawText(pos_x.c_str() ,2, 990, 32, BLACK);
+            DrawText(pos_y.c_str() ,2, 1042, 32, BLACK);
+
+
         EndDrawing();
     }
 

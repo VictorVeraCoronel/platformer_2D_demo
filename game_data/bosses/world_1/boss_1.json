@@ -1,9 +1,8 @@
 {
     "ai_archetype" : 0,
-    "aggro_range" : 500,
-    "lose_aggro_range" : 1000,
-    "follow_speed" : 100,
-    "patrol_speed" : 50,
+    "aggro_range" : 200,
+    "follow_speed" : 6000,
+    "patrol_speed" : 600,
     "entity_type" : "lurker",
     "hp" : 1.0,
     "sprite_id" : 0,

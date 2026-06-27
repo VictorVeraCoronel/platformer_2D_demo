@@ -47,7 +47,6 @@ struct AIComponent{
     bool active[MAX_ENTITIES] = {};
     AIState ai_states[MAX_ENTITIES] = {};
     float aggro_range[MAX_ENTITIES] = {};
-    float lose_aggro_range[MAX_ENTITIES]= {};
     float follow_speed[MAX_ENTITIES] = {};
     float patrol_speed[MAX_ENTITIES] = {};
 

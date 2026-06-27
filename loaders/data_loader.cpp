@@ -40,7 +40,6 @@ void ParseJsonToEntity(const nlohmann::json& json_data, Entity& entity) {
     if(json_data.contains("ai_archetype")){
         entity.ai_archetype = json_data["ai_archetype"].get<AIArchetype>();
         entity.aggro_range = json_data["aggro_range"].get<float>();
-        entity.lose_aggro_range = json_data["lose_aggro_range"].get<float>();
         entity.follow_speed = json_data["follow_speed"].get<float>();
         entity.patrol_speed = json_data["patrol_speed"].get<float>();
     }
