@@ -31,11 +31,25 @@ struct PhysicsComponent{
 struct StatsComponent{
     bool active[MAX_ENTITIES] = {};
     float hp[MAX_ENTITIES] = {};
-    float jumping_force[MAX_ENTITIES] = {};
-    float wall_jumping_force[MAX_ENTITIES] = {};
-    float running_force[MAX_ENTITIES] = {};
-    float air_movement_force[MAX_ENTITIES] = {};
+
+
+};
+
+struct LocomotionComponent{
+    bool active[MAX_PLAYERS] = {};
+    float jumping_force[MAX_PLAYERS] = {};
+    float wall_jumping_force[MAX_PLAYERS] = {};
+    float running_force[MAX_PLAYERS] = {};
+    float air_movement_force[MAX_PLAYERS] = {};
+};
+
+struct AIComponent{
+    bool active[MAX_ENTITIES] = {};
+    AIState ai_states[MAX_ENTITIES] = {};
     float aggro_range[MAX_ENTITIES] = {};
+    float lose_aggro_range[MAX_ENTITIES]= {};
+    float follow_speed[MAX_ENTITIES] = {};
+    float patrol_speed[MAX_ENTITIES] = {};
 
 };
 

@@ -1,4 +1,4 @@
-#include "../../core/world.h"
+#include "physics_system.h"
 #include <cmath>
 #include <iostream>
 
@@ -25,7 +25,6 @@ void IntegrateForces(World& world, float dt, uint16_t i){
 
     // UPDATE POSITION AS REQUESTED BY GAMEPLAY SYSTEM
     if(has_desired_position){
-        std::cout<<"Cambio la posiciooon"<<std::endl;
         pos_x = desired_pos_x;
         pos_y = desired_pos_y;
         has_desired_position = false;

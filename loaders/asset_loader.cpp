@@ -30,16 +30,20 @@ void LoadTextureCategory(Texture2D* target_array, const std::string& json_path, 
 
 void LoadUIAssets(World& world) {
     LoadTextureCategory(world.asset_repository.ui, "./game_data/textures/ui.json", "ui_assets");
+    std::cout<<"Assets de ui cargadas con exito"<<std::endl;
 }
 
 void LoadSpriteAssets(World& world) {
     LoadTextureCategory(world.asset_repository.sprite, "./game_data/textures/sprites.json", "sprites_assets");
+    std::cout<<"Assets de sprites cargadas con exito"<<std::endl;
 }
 
 void LoadTileAssets(World& world) {
     LoadTextureCategory(world.asset_repository.tile, "./game_data/textures/tiles.json", "tiles_assets");
+    std::cout<<"Assets de tiles cargadas con exito"<<std::endl;
 }
 
 void LoadWallpaperAssets(World& world) {
     LoadTextureCategory(world.asset_repository.wallpaper, "./game_data/textures/wallpapers.json", "wallpaper_assets");
+    std::cout<<"Assets de wallpapers cargadas con exito"<<std::endl;
 }

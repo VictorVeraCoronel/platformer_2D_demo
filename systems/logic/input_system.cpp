@@ -1,4 +1,4 @@
-#include "../../core/world.h"
+#include "input_system.h"
 #include <raylib.h>
 #include <iostream>
 
@@ -8,7 +8,6 @@ void UpdateInput(World& world, float dt){
 
     for(int i = 0; i < MAX_PLAYERS; i++){
         if (!inputs.active[i]) continue;//Performance check
-        //std::cout<<"Inputeooo: "<<i<<std::endl;
 
         int PLAYER = i;
         float& horizontal_lock_timer = inputs.horizontal_lock_timer[i];

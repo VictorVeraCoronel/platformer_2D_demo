@@ -26,6 +26,13 @@ enum class AIArchetype : uint8_t {
     RANGED_KITER = 1
 };
 
+enum class AIState : uint8_t {
+    IDLE = 0,
+    PATROL = 1,
+    FOLLOW = 2
+
+};
+
 enum class AnimState : uint8_t {
     IDLE = 0,
     RUNNING = 1,
@@ -121,6 +128,7 @@ struct AssetRepository{
 };
 
 struct Entity{
+    //stats
     float jumping_force;
     float running_force;
     float wall_jumping_force;
@@ -128,22 +136,31 @@ struct Entity{
     float HP;
     float anim_speed;
     float mass;
-    float aggro_range;
 
+    //ai
+    float aggro_range;
+    float lose_aggro_range;
+    float patrol_speed;
+    float follow_speed;
+
+    //assets
     uint16_t sprite_id;
     uint16_t sprite_width;
     uint16_t sprite_height;
+
+    //physics
     uint16_t width;
     uint16_t height;
-    uint8_t n_animation_frames;
 
+    //render and ai
+    uint8_t n_animation_frames;
     AIArchetype ai_archetype;
 };
 
 struct VirtualScreen{
 
-    int width;
-    int height;
+    uint16_t width;
+    uint16_t height;
 
     // Middleman texture before rendering to real screen
     RenderTexture2D target_render_texture;

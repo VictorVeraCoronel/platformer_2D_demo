@@ -1,4 +1,3 @@
-#include "../../core/world.h"
 #include "gameplay_system.h"
 #include <iostream>
 
@@ -25,7 +24,7 @@ void UpdateGameplay(World& world){
 void OrderPhysicsFromInput(World& world, int i){
     auto& inputs = world.inputs;
     auto& physics = world.physics;
-    auto& stats = world.stats;
+    auto& locomotions = world.locomotions;
 
     // Useful data references
     MoveIntentHorizontal& move_intent = inputs.move_intent[i];
@@ -37,10 +36,10 @@ void OrderPhysicsFromInput(World& world, int i){
     float& coyote_timer = physics.coyote_timer[i];
     WallCollision& wall_collision = physics.wall_collision[i];
     bool& is_grounded = physics.is_grounded[i];
-    float& running_force = stats.running_force[i];
-    float& jumping_force = stats.jumping_force[i];
-    float& wall_jumping_force = stats.wall_jumping_force[i];
-    float& air_movement_force = stats.air_movement_force[i];
+    float& running_force = locomotions.running_force[i];
+    float& jumping_force = locomotions.jumping_force[i];
+    float& wall_jumping_force = locomotions.wall_jumping_force[i];
+    float& air_movement_force = locomotions.air_movement_force[i];
 
     //HORIZONTAL MOVEMENT
     switch(move_intent){

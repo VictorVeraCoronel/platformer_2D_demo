@@ -1,4 +1,5 @@
 #include "../../core/world.h"
+#include "animation_system.h"
 
 void UpdateAnimationSystem(World& world, float dt) {
     for (int i = 0; i < MAX_ENTITIES; i++) {

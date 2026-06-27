@@ -10,6 +10,8 @@ struct World{
     //----------------------------------------------
     PhysicsComponent physics = {};
     StatsComponent stats = {};
+    LocomotionComponent locomotions = {};
+    AIComponent ais = {};
     InputComponent inputs = {};
     RenderComponent renders = {};
     AnimationComponent animations = {};

@@ -35,12 +35,10 @@ void RenderEntities(World& world){
             // Si la pared está a la DERECHA, el stickman debe mirar hacia la DERECHA (hacia el muro)
             if (physics.wall_collision[i] == WallCollision::RIGHT) {
                 width_sign = 1.0f;
-                std::cout<<"Pared a la derecha"<<std::endl;
             }
             // Si la pared está a la IZQUIERDA, el stickman debe mirar hacia la IZQUIERDA
             else if (physics.wall_collision[i] == WallCollision::LEFT) {
                 width_sign = -1.0f;
-                std::cout<<"Pared a la izquierda"<<std::endl;
             }
         }
 

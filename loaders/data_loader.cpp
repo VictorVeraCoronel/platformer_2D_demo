@@ -10,21 +10,41 @@
 
 // Internal auxiliar function
 void ParseJsonToEntity(const nlohmann::json& json_data, Entity& entity) {
+
+    // STAT COMPONENT DATA LOAD
     entity.HP = json_data["hp"].get<float>();
-    entity.ai_archetype = json_data["ai_archetype"].get<AIArchetype>();
-    entity.jumping_force = json_data["jumping_force"].get<float>();
-    entity.running_force = json_data["running_force"].get<float>();
-    entity.wall_jumping_force = json_data["wall_jumping_force"].get<float>();
-    entity.air_movement_force = json_data["air_movement_force"].get<float>();
+
+    // ANIMATION COMPONENT DATA LOAD
     entity.n_animation_frames = json_data["n_animation_frames"].get<uint8_t>();
     entity.anim_speed = json_data["anim_speed"].get<float>();
+
+    // RENDER COMPONENT DATA LOAD
     entity.sprite_height = json_data["sprite_height"].get<uint16_t>();
     entity.sprite_width = json_data["sprite_width"].get<uint16_t>();
     entity.sprite_id = json_data["sprite_id"].get<uint16_t>();
+
+    // PHYSIC COMPONENT DATA LOAD
     entity.width = json_data["width"].get<uint16_t>();
     entity.height = json_data["height"].get<uint16_t>();
     entity.mass = json_data["mass"].get<float>();
-    entity.aggro_range = json_data["aggro_range"].get<float>();
+
+    // LOCOMOTION COMPONENT DATA LOAD FOR PLAYER ENTITIES
+    if(!json_data.contains("ai_archetype")){
+        entity.jumping_force = json_data["jumping_force"].get<float>();
+        entity.running_force = json_data["running_force"].get<float>();
+        entity.wall_jumping_force = json_data["wall_jumping_force"].get<float>();
+        entity.air_movement_force = json_data["air_movement_force"].get<float>();
+    }
+
+    // AI COMPONENT DATA LOAD FOR NON PLAYER ENTITIES
+    if(json_data.contains("ai_archetype")){
+        entity.ai_archetype = json_data["ai_archetype"].get<AIArchetype>();
+        entity.aggro_range = json_data["aggro_range"].get<float>();
+        entity.lose_aggro_range = json_data["lose_aggro_range"].get<float>();
+        entity.follow_speed = json_data["follow_speed"].get<float>();
+        entity.patrol_speed = json_data["patrol_speed"].get<float>();
+    }
+
 }
 
 

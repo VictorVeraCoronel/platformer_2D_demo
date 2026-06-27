@@ -19,7 +19,10 @@ void LoadGameData(World& world){
 
     LoadPlayerData(world);
     LoadEnemiesData(world, "world_1");
+    std::cout<<"Probnado"<<std::endl;
     LoadBossesData(world, "world_1");
+
+
 
     LoadUIAssets(world);
     LoadSpriteAssets(world);
@@ -56,7 +59,6 @@ int main(){
 
 
     while (!WindowShouldClose()) {
-        //std::cout<<world->current_level.map[0]<<std::endl;
 
         float frame_time = GetFrameTime();
         if (frame_time > 0.25f) frame_time = 0.25f;
