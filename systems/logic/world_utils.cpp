@@ -1,6 +1,6 @@
 #include "world_utils.h"
 
-int16_t GetClosestPlayerIndex(const World& world, Vector2 entity_position) {
+uint16_t GetClosestPlayerIndex(const World& world, Vector2 entity_position) {
     float min_distance_squared = 99999999.0f;
     int closest_player_index = -1;
 
@@ -20,4 +20,22 @@ int16_t GetClosestPlayerIndex(const World& world, Vector2 entity_position) {
     }
 
     return closest_player_index;
+}
+
+void KillEntity(World& world, int i){
+
+    if( i >= MAX_PLAYERS){
+        world.stats.active[i] = false;
+        world.physics.active[i] = false;
+        world.sounds.active[i] = false;
+        world.ais.active[i] = false;
+        world.animations.active[i] = false;
+        world.locomotions.active[i] = false;
+        world.renders.active[i] = false;
+        std::cout<<"Sa muerto"<<std::endl;
+    }else{
+
+    }
+
+
 }

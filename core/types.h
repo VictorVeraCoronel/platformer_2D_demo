@@ -149,6 +149,7 @@ struct Entity{
     float wall_jumping_force;
     float air_movement_force;
     float HP;
+    float max_HP;
     float anim_speed;
     float mass;
 

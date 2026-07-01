@@ -1,6 +1,7 @@
 {
     "sprites_assets" : [
-        { "0" : "assets/sprites/temporal_player.png" }
+        { "0" : "assets/sprites/temporal_player.png" },
+        { "1" : "assets/sprites/temporal_enemy.png"}
 
     ]
 }

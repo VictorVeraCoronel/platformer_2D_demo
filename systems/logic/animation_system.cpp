@@ -19,4 +19,6 @@ void UpdateAnimationSystem(World& world, float dt) {
             }
         }
     }
+
+
 }

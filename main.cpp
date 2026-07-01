@@ -55,7 +55,7 @@ int main(){
             UpdateInput(*world, dt);
             UpdateAnimationSystem(*world, dt);
             UpdateAISystem(*world);
-            UpdateGameplay(*world);
+            UpdateGameplay(*world, dt);
             UpdatePhysics(*world, dt);
             FollowCamera(*world, camera, dt);
 

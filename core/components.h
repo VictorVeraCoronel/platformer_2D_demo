@@ -31,7 +31,9 @@ struct PhysicsComponent{
 struct StatsComponent{
     bool active[MAX_ENTITIES] = {};
     float hp[MAX_ENTITIES] = {};
-
+    float max_hp[MAX_ENTITIES] = {};
+    float pending_damage[MAX_ENTITIES] = {};
+    float inmune_timer[MAX_ENTITIES] = {};
 
 };
 

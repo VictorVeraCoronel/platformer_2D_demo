@@ -55,8 +55,13 @@ void RenderCore(const World& world, Camera2D& camera, const VirtualScreen& virtu
         // ---------------------------------------------------------------------------------------
         const std::string pos_x = "Position_x: " + std::to_string(world.physics.positions[0].x);
         const std::string pos_y = "Position_y: " + std::to_string(world.physics.positions[0].y);
+        const std::string pending = "hp: " + std::to_string(world.stats.hp[0]);
+        const std::string hp = "Invulnerability timer: " + std::to_string(world.stats.inmune_timer[0]);
+
         DrawText(pos_x.c_str() ,2, 990, 32, BLACK);
         DrawText(pos_y.c_str() ,2, 1042, 32, BLACK);
+        DrawText(pending.c_str() ,2, 930, 32, BLACK);
+        DrawText(hp.c_str() ,2, 960, 32, BLACK);
         // ---------------------------------------------------------------------------------------
         // DEBUG CONSOLE PRINTS                                                                  |
         // ---------------------------------------------------------------------------------------

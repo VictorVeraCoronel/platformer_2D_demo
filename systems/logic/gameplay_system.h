@@ -1,21 +1,30 @@
 #pragma once
 #include "../../core/world.h"
 
-void UpdateGameplay(World& world);
+void UpdateGameplay(World& world, float dt);
+
+// GENERAL GAMEPLAY FUNCTIONS
+
+void ApplyPendingDamage(World& world, float dt);
+
+
 
 // ENTITIES GAMEPLAY FUNCTIONS
 
-void UpdateEntityBehaviour(World& world, int i, int player_index);
+void UpdateEntityBehaviour(World& world);
 
-void UpdateEntityAnimations(World& world, int i);
+void UpdateEntityAnimations(World& world);
+
 
 
 // PLAYERS GAMEPLAY FUNCTIONS
 
-void OrderPhysicsFromInput(World& world, int i);
+void OrderPhysicsFromInput(World& world);
 
-void UpdateAnimationState(World& world, int i);
+void UpdateAnimationState(World& world);
 
-void ResetOutOfBounds(World& world, int i);
+void ResetOutOfBounds(World& world);
 
-void ClearInput(World& world,int i);
+void ResetIfDead(World& world);
+
+void ClearInput(World& world);

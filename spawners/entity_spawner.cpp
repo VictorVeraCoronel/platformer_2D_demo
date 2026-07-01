@@ -33,6 +33,7 @@ void SpawnEntity(World& world, std::string entity_type, Vector2 position, uint16
     // STATS COMPONENT INITIALIZATION
     world.stats.active[id] = true;
     world.stats.hp[id] = world.entity_repository[entity_type].HP;
+    world.stats.max_hp[id] = world.entity_repository[entity_type].max_HP;
 
 
     // RENDER COMPONENT INITIALIZATION

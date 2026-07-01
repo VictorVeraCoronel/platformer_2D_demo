@@ -13,6 +13,7 @@ void ParseJsonToEntity(const nlohmann::json& json_data, Entity& entity) {
 
     // STAT COMPONENT DATA LOAD
     entity.HP = json_data["hp"].get<float>();
+    entity.max_HP = json_data["hp"].get<float>();
 
     // ANIMATION COMPONENT DATA LOAD
     entity.n_animation_frames = json_data["n_animation_frames"].get<uint8_t>();
